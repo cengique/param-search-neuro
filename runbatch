@@ -1,0 +1,22 @@
+#! /bin/bash
+
+if [ -z "$1" ]; then
+   echo "Need to specify GENESIS script."
+   echo ""
+   echo "Usage: "
+   echo "   $0 genesis_script"
+   exit -1
+fi
+
+# TODO: parameterize genesis script and parameter file
+parfile=`grep '\.par' $1 | sed -e 's/^.*"\(.*\)"/\1/'`
+
+echo "Parfile: $parfile"
+
+# Get the number of trials from the parameter file
+trials=`awk 'BEGIN{ getline; print $1}' < $parfile`
+
+# Run genesis repeatedly
+for (( i = 0; i < $trials; i = $[ $i + 1 ] )); do 
+	genesis -nox -batch -notty $1 ; 
+done
