@@ -1,0 +1,28 @@
+#! /bin/bash
+
+if [ -z "$2" ]; then
+   echo "Need to specify GENESIS script and parameter file."
+   echo ""
+   echo "Usage: "
+   echo "   $0 genesis_script parameter_file"
+   exit -1
+fi
+
+trap exit INT
+
+genfile=$1
+parfile=$2
+
+echo "Parfile: $parfile"
+
+# Get the number of trials from the parameter file
+trials=`awk 'BEGIN{ getline; print $1}' < $parfile`
+
+export GENESIS_PAR_ROW
+
+# Run genesis repeatedly
+for (( i = 0; i < $trials; i = $[ $i + 1 ] )); do 
+    GENESIS_PAR_ROW=`lockLinuxFile dosim $parfile` 
+    [ $GENESIS_PAR_ROW == "?" ] && exit 0;
+    genesis -nox -batch -notty $genfile 
+done

@@ -1,0 +1,11 @@
+#! /bin/bash
+
+## Marks the last available simulation by changing the last parameter
+## executed from a parameter file to 1. It returns the whole parameter
+## line to be used by genesis.
+
+## TODO: use locking here
+
+paramfile=$1
+
+echo -e '/ 0$\ns/ 0$/ 1/\nw\nq\n' | ed $paramfile 2>&1 | head -3 | tail -1

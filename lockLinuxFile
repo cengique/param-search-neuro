@@ -1,0 +1,84 @@
+#! /usr/bin/perl -w
+
+## Wrapper script that locks a file so that multiple commands runs in
+## a mutually exclusive fashion.
+
+use strict;
+
+use Fcntl; # import LOCK_* constants
+use POSIX qw(:unistd_h :errno_h);
+
+if ($#ARGV < 0) {
+  die "Usage: $0 command arg1 arg2 ...\n";
+}
+
+my $lockfile = "mutex.lock";
+
+*struct_flock = \&linux_flock;
+
+print "Requesting lock on $lockfile.\n";
+##<>;
+
+open(LOCK, "+> $lockfile") or die "$!: Croooaaaaakk!";
+
+select(LOCK);
+$| = 1;
+select(STDOUT);
+
+my $endplace = 10;
+my $place = tell(LOCK);
+my $blocker = mylock(*LOCK, $place, $endplace);
+
+print "Acquired lock.\n";
+
+##print "Locked, press to release.";
+##<>;
+
+### Run given command here
+system("@ARGV");
+
+close LOCK;
+
+print "Released lock.\n";
+
+BEGIN {
+  # Linux struct flock
+  #   short l_type;
+  #   short l_whence;
+  #   off_t l_start;
+  #   off_t l_len;
+  #   pid_t l_pid;
+  my $FLOCK_STRUCT = 's s l l i';
+
+  sub linux_flock {
+    if (wantarray) {
+      my ($type, $whence, $start, $len, $pid) =
+	unpack($FLOCK_STRUCT, $_[0]);
+      return ($type, $whence, $start, $len, $pid);
+    } else {
+      my ($type, $whence, $start, $len, $pid) = @_;
+      return pack($FLOCK_STRUCT,
+		  $type, $whence, $start, $len, $pid);
+    }
+  }
+}
+
+# lock($handle, $offset, $endplace) - get an fcntl lock
+sub mylock {
+        my ($fh, $start, $till) = @_;
+        print "$$: Locking $start, $till\n";
+        my $lock = linux_flock(F_WRLCK, SEEK_SET, $start, $till, 0);
+        my $blocker = 0;
+        unless (fcntl($fh, F_SETLK, $lock)) {
+            die "F_SETLK $$ @_: $!" unless $! == EAGAIN || $! == EDEADLK;
+            fcntl($fh, F_GETLK, $lock)          or die "F_GETLK $$ @_: $!";
+            $blocker = (struct_flock($lock))[-1];
+            ##print "lock $$ @_: waiting for $blocker\n";
+            $lock = struct_flock(F_WRLCK, SEEK_SET, $start, $till, 0);
+            unless (fcntl($fh, F_SETLKW, $lock)) {
+                warn "F_SETLKW $$ @_: $!\n";
+                return;  # undef
+            }
+        }
+        return $blocker;
+}
