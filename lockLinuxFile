@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#! /usr/bin/perl
 
 ## Wrapper script that locks a file so that multiple commands runs in
 ## a mutually exclusive fashion.
@@ -37,6 +37,7 @@ my $blocker = mylock(*LOCK, $place, $endplace);
 ### Run given command here
 system("@ARGV");
 
+myunlock(*LOCK, $place, $endplace);
 close LOCK;
 
 ##print "Released lock.\n";
@@ -81,4 +82,12 @@ sub mylock {
             }
         }
         return $blocker;
+}
+
+# unlock($handle, $offset, $timeout) - release an fcntl lock
+sub myunlock {
+        my ($fh, $start, $till) = @_;
+        ##print "$$: Unlocking $start, $till\n";
+        my $lock = struct_flock(F_UNLCK, SEEK_SET, $start, $till, 0);
+        fcntl($fh, F_SETLK, $lock) or die "F_UNLCK $$ @_: $!";
 }
