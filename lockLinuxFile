@@ -16,7 +16,7 @@ my $lockfile = "mutex.lock";
 
 *struct_flock = \&linux_flock;
 
-print "Requesting lock on $lockfile.\n";
+##print "Requesting lock on $lockfile.\n";
 ##<>;
 
 open(LOCK, "+> $lockfile") or die "$!: Croooaaaaakk!";
@@ -29,7 +29,7 @@ my $endplace = 10;
 my $place = tell(LOCK);
 my $blocker = mylock(*LOCK, $place, $endplace);
 
-print "Acquired lock.\n";
+##print "Acquired lock.\n";
 
 ##print "Locked, press to release.";
 ##<>;
@@ -39,7 +39,7 @@ system("@ARGV");
 
 close LOCK;
 
-print "Released lock.\n";
+##print "Released lock.\n";
 
 BEGIN {
   # Linux struct flock
@@ -66,7 +66,7 @@ BEGIN {
 # lock($handle, $offset, $endplace) - get an fcntl lock
 sub mylock {
         my ($fh, $start, $till) = @_;
-        print "$$: Locking $start, $till\n";
+        ##print "$$: Locking $start, $till\n";
         my $lock = linux_flock(F_WRLCK, SEEK_SET, $start, $till, 0);
         my $blocker = 0;
         unless (fcntl($fh, F_SETLK, $lock)) {

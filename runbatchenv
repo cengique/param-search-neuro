@@ -23,6 +23,7 @@ export GENESIS_PAR_ROW
 # Run genesis repeatedly
 for (( i = 0; i < $trials; i = $[ $i + 1 ] )); do 
     GENESIS_PAR_ROW=`lockLinuxFile dosim $parfile` 
-    [ $GENESIS_PAR_ROW == "?" ] && exit 0;
+    echo \"$GENESIS_PAR_ROW\"
+    [ $GENESIS_PAR_ROW == "?" ] && echo "No more parameters, ending." && exit 0;
     genesis -nox -batch -notty $genfile 
 done
