@@ -7,7 +7,7 @@ fi
 for node in `awk -F, '{for (i=1; i<=NF; i++) { print $i " " }}' < trialnodes`; 
 do 
 	echo -e "\nRunning on $node..." 
-	ssh -A ${node} "bash --login -c \"$*\""
+	ssh -A -q ${node} "bash --login -c \"$*\""
 	#ssh ${node} 'bash --login -c "cd transfer; screen -d -m ./runbatch run_bruteforce_030504_1.g"'
 	#ssh ${node} 'bash --login -c "cd transfer; screen -d -m ./runbatch run_bruteforce_030504_2.g"'
 	#scp jedgerton/runbatch ${node}:transfer/

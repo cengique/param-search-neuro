@@ -9,17 +9,18 @@ use Fcntl; # import LOCK_* constants
 use POSIX qw(:unistd_h :errno_h);
 
 if ($#ARGV < 0) {
-  die "Usage: $0 command arg1 arg2 ...\n";
+  die "Usage: $0 lockfile command arg1 arg2 ...\n";
 }
 
-my $lockfile = "mutex.lock";
+#my $lockfile = "mutex.lock";
+my $lockfile = shift;
 
 *struct_flock = \&linux_flock;
 
-##print "Requesting lock on $lockfile.\n";
+print STDERR "Requesting lock on $lockfile.\n";
 ##<>;
 
-open(LOCK, "+> $lockfile") or die "$!: Croooaaaaakk!";
+open(LOCK, "+< $lockfile") or die "$!: Croooaaaaakk!";
 
 select(LOCK);
 $| = 1;
@@ -29,18 +30,19 @@ my $endplace = 10;
 my $place = tell(LOCK);
 my $blocker = mylock(*LOCK, $place, $endplace);
 
-##print "Acquired lock.\n";
+print STDERR "Acquired lock.\n";
 
 ##print "Locked, press to release.";
 ##<>;
 
 ### Run given command here
+##print "@ARGV";
 system("@ARGV");
 
 myunlock(*LOCK, $place, $endplace);
 close LOCK;
 
-##print "Released lock.\n";
+print STDERR "Released lock.\n";
 
 BEGIN {
   # Linux struct flock
@@ -67,14 +69,15 @@ BEGIN {
 # lock($handle, $offset, $endplace) - get an fcntl lock
 sub mylock {
         my ($fh, $start, $till) = @_;
-        ##print "$$: Locking $start, $till\n";
+        print STDERR "$$: Locking $start, $till\n";
         my $lock = linux_flock(F_WRLCK, SEEK_SET, $start, $till, 0);
         my $blocker = 0;
         unless (fcntl($fh, F_SETLK, $lock)) {
+	    print STDERR "F_SETLK failed, asking blocker info.";
             die "F_SETLK $$ @_: $!" unless $! == EAGAIN || $! == EDEADLK;
             fcntl($fh, F_GETLK, $lock)          or die "F_GETLK $$ @_: $!";
             $blocker = (struct_flock($lock))[-1];
-            ##print "lock $$ @_: waiting for $blocker\n";
+            print STDERR "lock $$ @_: waiting for $blocker\n";
             $lock = struct_flock(F_WRLCK, SEEK_SET, $start, $till, 0);
             unless (fcntl($fh, F_SETLKW, $lock)) {
                 warn "F_SETLKW $$ @_: $!\n";
@@ -87,7 +90,7 @@ sub mylock {
 # unlock($handle, $offset, $timeout) - release an fcntl lock
 sub myunlock {
         my ($fh, $start, $till) = @_;
-        ##print "$$: Unlocking $start, $till\n";
+        print STDERR "$$: Unlocking $start, $till\n";
         my $lock = struct_flock(F_UNLCK, SEEK_SET, $start, $till, 0);
         fcntl($fh, F_SETLK, $lock) or die "F_UNLCK $$ @_: $!";
 }
