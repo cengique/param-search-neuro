@@ -7,20 +7,13 @@
 
 use strict;
 
-my @params;
-
 #print "ARGV: @ARGV\n";
 &usage if $#ARGV < 1;
-#die "Specify number of nodes on command line!\n" ;
+
 my $nodes = shift;
 my $filename_prefix = shift;
 
-# Read std input
-while (<>) {
-  /(\w+)\s+([\.\-\w]+)\s+([\.\-\w]+)\s+(\w+)/;
-  print "Name: '$1', '$2', '$3', '$4'\n";
-  push @params, { name => "$1", range_low => $2, range_high => $3, steps => $4 };
-}
+my @params = @{&readParamFile};
 
 # Display data structure
 # Calculate total number of runs
@@ -37,7 +30,7 @@ print "$steps total number of simulations.\n";
 my $count_per_node = int($steps / $nodes + 0.5 ); # Round up
 for (my $i = 0; $i < $steps; $i++ ) {
   if ( $i % $count_per_node == 0 ) {
-    close OFILE if tell(OFILE) != -1;
+    close OFILE if defined(OFILE);
     my $filename = $filename_prefix . "_" . int($i / $count_per_node) . ".par";
     open OFILE, ">$filename" or die "Cannot open $filename for writing!\n";
     my $count_left = min($count_per_node, $steps - $i);
@@ -57,12 +50,18 @@ sub paramConf {
     my $param_step = $count % $param{steps};
     #print "Param $param{name}, val=", $param_step, "\n";
     my $param_val;
-    if ( $param{steps} == 1) {
-      $param_val = $param{range_low};
+    if (exists $param{range_low}) { # Linear increment parameter
+      if ( $param{steps} == 1) {
+	$param_val = $param{range_low};
+      } else {
+	$param_val = $param{range_low} + 
+	  $param_step * ($param{range_high} - $param{range_low}) / 
+	    ( $param{steps} - 1); # inclusive
+      }
+    } elsif (exists $param{base}) { # Geometric increment parameter
+      $param_val = $param{base} * pow($param{mult}, $param_step);
     } else {
-      $param_val = $param{range_low} + 
-		    $param_step * ($param{range_high} - $param{range_low}) / 
-		    ( $param{steps} - 1); # inclusive
+      die "Invalid parameter: $param\n";
     }
     $param_row .= $param_val . " ";
     $count /= $param{steps};
@@ -80,6 +79,38 @@ sub min {
   } else {
     $_ = $a;
   }
+}
+
+# Returns the power of a number
+sub pow {
+  my $base = shift;
+  my $power = shift;
+
+  $_ = exp($power * log($base));
+}
+
+sub readParamFile {
+  my @params;
+
+  # Read std input
+  while (<>) {
+    /(\w+)\s+([\.\-\w]+)([\*\s]+)([\.\-\w]+)([\^\s]+)(\w+)/;
+    print "Name: '$1', '$2'$3'$4'$5'$6'\n";
+    my $name = $1;
+    my $base = $2;
+    my $top = $4;
+    my $steps = $6;
+    $_ = $3;
+    if (/\*/) {
+      push @params, { name => "$name", base => $base,
+		      mult => $top, steps => $steps };
+    } else {
+      push @params, { name => "$name", range_low => $base,
+		      range_high => $top, steps => $steps };
+    }
+  }
+
+  $_ = \@params;
 }
 
 sub usage {
