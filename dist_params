@@ -1,0 +1,1 @@
+i=0; for node in `cat ~/trialnodes`; do node=${node%%,}; rcp brute080304_$i.par $node:gpsim_080304/runs/thisrun/brute.par; i=$[ $i + 1 ]; done

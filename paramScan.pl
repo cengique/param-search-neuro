@@ -30,7 +30,7 @@ print "$steps total number of simulations.\n";
 my $count_per_node = int($steps / $nodes + 0.5 ); # Round up
 for (my $i = 0; $i < $steps; $i++ ) {
   if ( $i % $count_per_node == 0 ) {
-    close OFILE if defined(OFILE);
+    close OFILE if tell(OFILE) != -1;
     my $filename = $filename_prefix . "_" . int($i / $count_per_node) . ".par";
     open OFILE, ">$filename" or die "Cannot open $filename for writing!\n";
     my $count_left = min($count_per_node, $steps - $i);

@@ -1,0 +1,14 @@
+#! /bin/bash
+if [ -z "$1" ]; then
+  echo "Usage: $0 command..."
+  echo "Runs the given command for all the nodes specified in the trialnodes file."
+  exit -1
+fi
+for node in `awk -F, '{for (i=1; i<=NF; i++) { print $i " " }}' < trialnodes`; 
+do 
+	echo -e "\nRunning on $node..." 
+	rsh ${node} "bash --login -c \"$*\""
+	#ssh ${node} 'bash --login -c "cd transfer; screen -d -m ./runbatch run_bruteforce_030504_1.g"'
+	#ssh ${node} 'bash --login -c "cd transfer; screen -d -m ./runbatch run_bruteforce_030504_2.g"'
+	#scp jedgerton/runbatch ${node}:transfer/
+done

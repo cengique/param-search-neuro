@@ -1,0 +1,8 @@
+#! /bin/bash
+
+## Takes the last simulation back by reverting the last parameter
+## executed from a parameter file to 0.
+
+paramfile=$1
+
+echo -e '/ 0$\n-1\ns/ 1$/ 0/\nw\nq\n' | ed $paramfile

@@ -8,6 +8,8 @@ if [ -z "$1" ]; then
    exit -1
 fi
 
+trap exit INT
+
 # TODO: parameterize genesis script and parameter file
 parfile=`grep '\.par' $1 | sed -e 's/^.*"\(.*\)"/\1/'`
 

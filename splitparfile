@@ -1,0 +1,31 @@
+#! /bin/bash
+
+## Splits the remaining parts of a parameter file into two separate
+## parameter files.
+## -CG 2004/08/05
+
+parfile=$1
+num_cols=`head -1 $parfile | awk '{print $2}'`
+echo $num_cols
+
+tmpfile=tmp\$.par
+cat $parfile | grep " 0$" > $tmpfile
+num_lines=`wc < $tmpfile | awk '{print $1}'`
+echo $num_lines
+
+## Get num lines in each file
+first_half=$[ $num_lines / 2 ]
+rest=$[ $num_lines - $first_half ]
+
+## First file
+file0=${parfile%%.par}_0.par
+echo "$first_half $num_cols" > $file0
+head -n $first_half $tmpfile >> $file0
+
+## Second one
+file1=${parfile%%.par}_1.par
+echo "$rest $num_cols" > $file1
+tail -n $rest $tmpfile >> $file1
+
+## Clean-up
+rm $tmpfile

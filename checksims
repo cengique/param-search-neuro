@@ -1,0 +1,4 @@
+#! /bin/bash
+date
+./forall "uptime; echo Number of data files created:; ls -1 transfer/data | wc | awk '{print \$1}'"
+
