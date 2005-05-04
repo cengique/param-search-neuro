@@ -5,8 +5,13 @@
 #$ -N sge_run
 #$ -S /bin/bash
 
+# Run this with:
+# qsub -t 1:1310 ~/brute_scripts/sge_perllock.sh setup_cip_act_handtune.g blocked_gps0501-03_2.par
+
 # Need to source our own rc file. >:O
 source $HOME/.bashrc
+
+curdir=`pwd`
 
 echo "Starting job $SGE_TASK_ID/$SGE_TASK_LAST on $HOSTNAME"
 date
@@ -29,16 +34,16 @@ export GENESIS_PAR_ROW
 # Random delay to avoid deadlock
 #awk 'BEGIN {system("sleep " rand() * 10)}'
 
-# Read parameter values
-
-# Watchdog counter
+# Read parameter values.
+# Repeat if ssh craps out until the
+# watchdog counter runs out.
 count=20
-until GENESIS_PAR_ROW=`ssh clust.cc.emory.edu cd run\; lockLinuxFile $parfile dosim $parfile`; || [ $count < 1 ] do 
+until GENESIS_PAR_ROW=`ssh clust.cc.emory.edu cd $curdir\; lockLinuxFile $parfile dosim $parfile` || [ $count < 1 ]; do 
 	echo "Reading parameters... Countdown: $count"
 	count=$[ $count - 1]
+	sleep 1
 done
 
-#rm -f mutex2.lock
 [ "$GENESIS_PAR_ROW" == "?" ] && echo "No more parameters, ending." && exit 0;
 
 # Run genesis 
