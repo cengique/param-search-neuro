@@ -24,13 +24,13 @@ foreach my $param (@params) {
   $steps *= $param{steps};
 }
 
-print "$steps total number of simulations.\n";
+print "" . ($#params + 1) . " parameters. $steps total number of simulations.\n";
 
 # Count to steps and put into separate param files
 my $count_per_node = int($steps / $nodes + 0.5 ); # Round up
 for (my $i = 0; $i < $steps; $i++ ) {
   if ( $i % $count_per_node == 0 ) {
-    close OFILE if tell(OFILE) != -1;
+    close OFILE if $i != 0;
     my $filename = $filename_prefix . "_" . int($i / $count_per_node) . ".par";
     open OFILE, ">$filename" or die "Cannot open $filename for writing!\n";
     my $count_left = min($count_per_node, $steps - $i);
@@ -94,6 +94,7 @@ sub readParamFile {
 
   # Read std input
   while (<>) {
+    next if /^\s*#/;		# Skip comment inputs.
     /(\w+)\s+([\.\-\w]+)([\*\s]+)([\.\-\w]+)([\^\s]+)(\w+)/;
     print "Name: '$1', '$2'$3'$4'$5'$6'\n";
     my $name = $1;
@@ -118,12 +119,17 @@ sub usage {
  Usage:
 	$0 num_CPUs param_file_prefix
 
- Generates N Genesis parameter files, one for each CPU, to scan 
+ Generates N Genesis parameter files, one for each CPU, to scan
  a full parameter range. Each parameter is changed
  to a fixed number of steps within its range.
- 
- Parameter ranges come from an input file a row for each param:
+
+ Parameter ranges come from an input file with a row for each param.
+ It can have the following forms:
+ 1. Additive increments
  	param_name range_low range_high num_steps
+ 2. Multiplicative increments
+ 	param_name base_val *mul_factor ^num_steps
+
  The parameters are written with order of appearance to Genesis files.
 
  Cengiz Gunay <cgunay\@emory.edu>, 2004/05/15

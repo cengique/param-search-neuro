@@ -1,0 +1,26 @@
+#! /bin/bash
+
+if [ -z "$2" ]; then
+   echo "Runs genesis repeatedly for all remaining parameter rows in file."
+   echo ""
+   echo "Error: Need to specify GENESIS script and parameter file."
+   echo ""
+   echo "Usage: "
+   echo "   $0 genesis_script parameter_file [genesis_executable]"
+   exit -1
+fi
+
+trap exit INT
+
+genfile=$1
+parfile=$2
+
+genexec=genesis	# Default
+[ -n "$3" ] && genexec=$3
+
+# Get the number of remaining zero-ending rows from the parameter file (not used)
+# trials=`grep " 0$" $parfile | wc -l`
+
+# Run genesis repeatedly until perllock.sh complains about missing parameter rows
+# (careful, this is an infinite loop)
+while perllock.sh $genfile $parfile $genexec; do echo; done
