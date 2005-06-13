@@ -5,6 +5,9 @@
 #$ -N sge_run
 #$ -S /bin/bash
 
+# Test script that runs a job that sleeps for a few seconds 
+# instead of running genesis. It still processes the parameter file.
+
 # Run this with:
 # qsub -t 1:1310 ~/brute_scripts/sge_perllock.sh setup_cip_act_handtune.g blocked_gps0501-03_2.par
 
@@ -49,7 +52,8 @@ done
 [ "$GENESIS_PAR_ROW" == "?" ] && echo "No more parameters, ending." && exit 0;
 
 # Run genesis 
-genesis -nox -batch -notty $genfile 
+#genesis -nox -batch -notty $genfile 
+sleep 10
 
 echo "Ending job"
 date
