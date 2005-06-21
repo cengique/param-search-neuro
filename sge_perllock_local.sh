@@ -29,12 +29,17 @@ trap exit INT
 genfile=$1
 parfile=$2
 
+# Random delay to avoid deadlock
+awk 'BEGIN {system("sleep " rand() * 20)}'
+
 export GENESIS_PAR_ROW
 
 # Read parameter values.
 GENESIS_PAR_ROW=`lockLinuxFile $parfile dosim $parfile`
 
-[ "$GENESIS_PAR_ROW" == "?" ] && echo "No more parameters, ending." && exit 0;
+[[ $? != 0 ]] && echo "Error: Cannot read parameter row from $parfile, ending." && exit -1
+
+[ "$GENESIS_PAR_ROW" == "?" ] && echo "No more parameters, ending." && exit 0
 
 # Run genesis 
 genesis -nox -batch -notty $genfile 

@@ -32,7 +32,7 @@ parfile=$2
 export GENESIS_PAR_ROW
 
 # Random delay to avoid deadlock
-#awk 'BEGIN {system("sleep " rand() * 10)}'
+awk 'BEGIN {system("sleep " rand() * 20)}'
 
 # Read parameter values.
 # Repeat if ssh craps out until the

@@ -11,7 +11,7 @@ Use the "qsub" command to submit jobs to the SGE.
 
 Example:
 
-$ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perllock_local.sh my_gen_script.g my_conductances.par
+$ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perllock.sh my_gen_script.g my_conductances.par
 
 will launch 100 jobs processing the given parameter file.
 
@@ -41,12 +41,10 @@ runbatchremain		- Deprecated: Same as runbatch, but runs as many processes
 			as to finish the remaining rows in a parameter file.
 run_genesis.sh		- Simple SGE submission script that runs a Genesis script 
 			without refering to a parameter file.
-sge_perllock_local.sh	- SGE submission script that uses file locking to access
-			rows of a central parameter file. This is the preferred
-			way of submitting jobs. See above example.	
+sge_perllock_local.sh	- Deprecated: SGE submission script that uses network
+			file locking to access rows of a central parameter file.
 sge_perllock.sh		- SGE submission script, same as *_local.sh above, but
 			uses ssh to connect to master node and request file locking.
-			If works, sge_perllock_local.sh is preferred.
 sge_perllock_test.sh	- Empty SGE submission script for testing purposes. Waits 
 			for a few seconds instead of running Genesis.
 splitparfile		- Split a parameter file into two parts.
