@@ -1,7 +1,8 @@
 #!/usr/bin/perl -W
 
-use MLDBM qw(DB_File);
+#use MLDBM qw(DB_File);
 use Fcntl;
+use NDBM_File;
 
 print "Error: arguments missing.\n\nUsage: $0 parameter_file row_num\n" 
   if $#ARGV < 1;
@@ -9,7 +10,11 @@ print "Error: arguments missing.\n\nUsage: $0 parameter_file row_num\n"
 my $parfile = shift;
 my $row_num = shift;
 
-tie(%param_rows, 'MLDBM', "$parfile" . '.db', O_READ, 0666 );
+my $dbfilename = "$parfile" . '.db';
+
+#tie(%param_rows, 'MLDBM', $dbfilename, O_RDONLY, 0666 );
+tie(%param_rows, 'NDBM_File', $dbfilename, O_RDONLY, 0666 ) or
+  die "Cannot access the parameter database $dbfilename\n";
 
 # read parameter row
 print $param_rows{$row_num};
