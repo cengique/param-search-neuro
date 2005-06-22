@@ -1,0 +1,18 @@
+#!/usr/bin/perl -W
+
+use MLDBM qw(DB_File);
+use Fcntl;
+
+print "Error: arguments missing.\n\nUsage: $0 parameter_file row_num\n" 
+  if $#ARGV < 1;
+
+my $parfile = shift;
+my $row_num = shift;
+
+tie(%param_rows, 'MLDBM', "$parfile" . '.db', O_READ, 0666 );
+
+# read parameter row
+print $param_rows{$row_num};
+
+untie $param_rows;
+

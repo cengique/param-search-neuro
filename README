@@ -1,8 +1,8 @@
 Add the following line in your ~/.bashrc file to adjust your 
 path for Jaegerlab settings:
----
+--- CUT FROM HERE ---
 . ~jaegerlab/brute_scripts/rc.sh
----
+--- CUT TO HERE ---
 
 To learn about the Sun Grid Engine (SGE) on how to submit 
 and monitor jobs, start from the "man sge_intro" manual page. 
