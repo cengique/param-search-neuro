@@ -1,7 +1,7 @@
 #!/usr/bin/perl -W
 
 use Fcntl;
-use NDBM_File;
+use DB_File;
 
 if ($#ARGV < 0) {
   print "Error: arguments missing.\n\n";
@@ -12,9 +12,9 @@ if ($#ARGV < 0) {
 my $param_file = shift;
 my %param_rows;
 
-my $dbfilename = "$param_file";
+my $dbfilename = "$param_file" . ".db";
 
-tie(%param_rows, 'NDBM_File', $dbfilename, O_RDWR|O_CREAT, 0666 ) or
+tie(%param_rows, DB_File, $dbfilename, O_RDWR|O_CREAT, 0666, $DB_HASH ) or
   die "Cannot create the parameter database $dbfilename: \n$!\n";
 
 # Open Genesis file

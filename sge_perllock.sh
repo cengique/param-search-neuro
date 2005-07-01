@@ -49,7 +49,7 @@ done
 [ "$GENESIS_PAR_ROW" == "?" ] && echo "No more parameters, ending." && exit 0;
 
 # Run genesis 
-genesis -nox -batch -notty $genfile 
+genesis -nox -batch -notty $genfile || echo "GENESIS run failed, terminating job!" && exit -1
 
 echo "Ending job"
 date
