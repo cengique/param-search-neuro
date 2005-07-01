@@ -8,6 +8,21 @@ use strict;
 
 my $param_file = shift;
 my $param_desc_file = shift;
+my $check_exists_script;
+
+if ($#ARGV >= 0) {
+  $check_exists_script = shift;
+} else {
+  $check_exists_script = "checkParamValGenesisFile";
+}
+
+my $prefix = '';
+my $suffix = '';
+
+if ($#ARGV >= 0) {
+  $prefix = shift;
+  $suffix = shift if ($#ARGV >= 0);
+}
 
 # Open the description file first
 open DFILE, "<$param_desc_file"
@@ -16,6 +31,7 @@ open DFILE, "<$param_desc_file"
 # Read all lines from file
 my @param_names;
 while (<DFILE>) {
+  next if /^\s*#/;		# Ignore remarks
   my $param_name = $1 if /^(\w+)/;
   push @param_names, $param_name;
 }
@@ -32,19 +48,15 @@ my $first_line = <GFILE>;
 # Read all lines from file
 my @param_lines;
 while (<GFILE>) {
+
   my @param_vals = split /\s+/;
-  my $n = 0;
-  my @name_vals = grep {$_ = $_ . "_" . $param_names[$n]
-			  if $n <= $#param_names;
-			$n = $n + 1; ($n - 1) <= $#param_names}
-    @param_vals;
+  my $param_vals_wo_last = $1 if /^(.*)\s+[01]+\s*$/;
+  my $check_command = 
+    "$check_exists_script " . ($#param_names + 1) . " @param_names $param_vals_wo_last " .
+      "$prefix $suffix";
+  #print STDERR "Exec: $check_command\n";
 
-  # Do it again, because we destroyed it
-  @param_vals = split /\s+/;
-  my $filename = join('_', @name_vals) . '.bin'; # Extension
-  #print STDERR "$filename\n";
-
-  if (-r $filename) {
+  if (system($check_command) == 0) {
     $param_vals[$#param_vals] = 1; # Exists
   } else {
     $param_vals[$#param_vals] = 0; # Missing
@@ -67,11 +79,17 @@ foreach my $line (@param_lines) {
 sub usage {
   print << "END";
  Usage:
-	$0 param_file param_desc_file > new_param_file
+	$0 param_file param_desc_file [check_exists_script [prefix [suffix]]] > new_param_file
 
  Scans the GENESIS-style parameter file and looks for output files in
  the current directory. It needs the param_desc_file for the names
  of the parameters used to generate the output files. 
+
+ The optional check_exists_script should return successfully if a file
+ exists given a list of parameters from the parameter file. It should
+ generate the file name as would the gensis script and then check for
+ its existence. The optional prefix and suffix are passed to the
+ check_exists_script.
 
  Cengiz Gunay <cgunay\@emory.edu>, 2004/10/07
 

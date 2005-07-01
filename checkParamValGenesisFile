@@ -1,0 +1,67 @@
+#! /usr/bin/perl -w
+
+## Checks for the existence of a file, given a parameter row on the
+## command line.
+
+use strict;
+
+if ($#ARGV < 1) {
+  &usage;
+  exit -1;
+}
+
+my $num_params = shift;
+my @param_names;
+my @param_vals;
+my $counter = 0;
+
+for ($counter = 0; $counter < $num_params; $counter++) {
+  $param_names[$counter] = shift;
+}
+
+for ($counter = 0; $counter < $num_params; $counter++) {
+  $param_vals[$counter] = shift;
+}
+
+my $prefix = '';
+my $suffix = '.bin';
+
+if ($#ARGV >= 0) {
+  $prefix = shift;
+  $suffix = shift if ($#ARGV >= 0);
+}
+
+my $n = 0;
+my @name_vals = @param_vals;
+@name_vals = grep {$_ = $_ . "_" . $param_names[$n]
+			if $n <= $#param_names;
+		      $n = $n + 1; ($n - 1) <= $#param_names}
+  @param_vals;
+
+# Do it again, because we destroyed it?
+#@param_vals = split /\s+/;
+my $filename = $prefix . join('_', @name_vals) . $suffix;
+#print STDERR "$filename\n";
+
+# Do the existence check
+if ( -r $filename ) {
+  #print STDERR "Found: $filename\n";
+  exit 0;
+} else {
+  #print STDERR "Missing: $filename\n";
+  exit -1;
+}
+
+sub usage {
+  print << "END";
+ Usage:
+	$0 num_params param_names param_vals [prefix [suffix]]
+
+ Given the parameters and values, generates a genesis data file and
+ checks for its exsitence. optional prefix and suffix strings for the
+ data file name can be specified.
+
+ Cengiz Gunay <cgunay\@emory.edu>, 2005/07/01
+
+END
+}
