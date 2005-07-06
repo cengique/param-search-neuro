@@ -43,6 +43,7 @@ close OFILE if tell(OFILE) != -1;
 # Parameter values according to a specific count
 sub paramConf {
   my $count = shift;
+  my $orig_count = $count;
   
   my $param_row = "";
   foreach my $param (@params) {
@@ -60,13 +61,15 @@ sub paramConf {
       }
     } elsif (exists $param{base}) { # Geometric increment parameter
       $param_val = $param{base} * pow($param{mult}, $param_step);
+    } elsif (exists $param{start}) { # counter
+      $param_val = $param{start} + $orig_count;
     } else {
       die "Invalid parameter: $param\n";
     }
     $param_row .= $param_val . " ";
     $count /= $param{steps};
   }
-  $_ = $param_row . " 0\n";
+  $_ = $param_row . "0\n";
 }
 
 # Returns the minimum of two values
@@ -95,19 +98,24 @@ sub readParamFile {
   # Read std input
   while (<>) {
     next if /^\s*#/;		# Skip comment inputs.
-    /(\w+)\s+([\.\-\w]+)([\*\s]+)([\.\-\w]+)([\^\s]+)(\w+)/;
-    print "Name: '$1', '$2'$3'$4'$5'$6'\n";
-    my $name = $1;
-    my $base = $2;
-    my $top = $4;
-    my $steps = $6;
-    $_ = $3;
-    if (/\*/) {
-      push @params, { name => "$name", base => $base,
-		      mult => $top, steps => $steps };
-    } else {
-      push @params, { name => "$name", range_low => $base,
-		      range_high => $top, steps => $steps };
+    if (/(\w+)\s+([\.\-\w]+)([\*\s]+)([\.\-\w]+)([\^\s]+)(\w+)/) {
+      print "Name: '$1', '$2'$3'$4'$5'$6'\n";
+      my $name = $1;
+      my $base = $2;
+      my $top = $4;
+      my $steps = $6;
+      $_ = $3;
+      if (/\*/) {
+	push @params, { name => "$name", base => $base,
+			mult => $top, steps => $steps };
+      } else {
+	push @params, { name => "$name", range_low => $base,
+			range_high => $top, steps => $steps };
+      }
+    } elsif ((/(\w+)\s+([\.\-\w]+)\s*\+\+\s*([\.\-\w]*)/)) {
+      print "Name: '$1', '$2'++ '$3'\n";
+      push @params, { name => "$1", start => $2,
+		      increment => $3, steps => 1 };
     }
   }
 
@@ -129,6 +137,8 @@ sub usage {
  	param_name range_low range_high num_steps
  2. Multiplicative increments
  	param_name base_val *mul_factor ^num_steps
+ 3. Independent counter (indicates trial number)
+	param_name start_val ++ [increment]
 
  The parameters are written with order of appearance to Genesis files.
 
