@@ -1,0 +1,2 @@
+G_Na_fast_GP  	250 *2 ^3
+G_Na_slow_GP   	0.06 *5 ^3
