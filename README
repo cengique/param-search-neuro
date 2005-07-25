@@ -10,6 +10,10 @@ and monitor jobs, start from the "man sge_intro" manual page.
 Use the "qsub" command to submit jobs to the SGE.
 
 Example:
+$ create_perlhash_param_db my_conductances.par
+$ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perlhash.sh my_gen_script.g my_conductances.par
+
+Old method that sshs to master node for locking:
 
 $ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perllock.sh my_gen_script.g my_conductances.par
 
