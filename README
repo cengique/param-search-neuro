@@ -1,3 +1,16 @@
+README FILE FOR JAEGER LAB CLUSTER SCRIPTS
+-------------------------------------------
+
+CONTENTS:
+---------
+1. INTRO/REQUIREMENTS
+2. EXAMPLES
+3. LIST OF ALL SCRIPTS
+
+----------------------------------------
+1. INTRO/REQUIREMENTS
+----------------------------------------
+
 Add the following line in your ~/.bashrc file to adjust your 
 path for Jaegerlab settings:
 --- CUT FROM HERE ---
@@ -9,44 +22,70 @@ and monitor jobs, start from the "man sge_intro" manual page.
 
 Use the "qsub" command to submit jobs to the SGE.
 
-Example:
+----------------------------------------
+2. EXAMPLES
+----------------------------------------
+
+GENESIS Example with Parameter File 1:
+---
+$ sge_submit setup_newscan.g exc-subset-simple-scan-2.par
+GENESIS script: setup_newscan.g; param. file: exc-subset-simple-scan-2.par
+with 440 trials.
+
+440 rows and 11 parameters in file exc-subset-simple-scan-2.par.
+
+Your job 22538.1-440:1 ("sge_run") has been submitted.
+---
+
+GENESIS Example with Parameter File 2:
+---
 $ create_perlhash_param_db my_conductances.par
 $ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perlhash.sh my_gen_script.g my_conductances.par
+---
 
-Old method that sshs to master node for locking:
+GENESIS Example w/o Parameter File:
+---
+$ qsub ~jaegerlab/brute_scripts/run_genesis.sh my_gen_script.g
+---
+
+MATLAB Example 1:
+---
+$ qsub -t 1:60 ~jaegerlab/brute_scripts/sge_matlab.sh load_part%d
+---
+This will call load_part1, load_part2, etc. in each matlab process.
+
+MATLAB Example 2:
+---
+$ qsub -t 1:60 ~jaegerlab/brute_scripts/sge_matlab.sh load_part%d
+---
+This will call load_part1, load_part2, ..., load_part60 in each matlab process.
+
+Example of old method that sshs to master node for locking:
 
 $ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perllock.sh my_gen_script.g my_conductances.par
 
 will launch 100 jobs processing the given parameter file.
 
-Files in this directory:
-------------------------------
+----------------------------------------
+3. LIST OF ALL SCRIPTS
+----------------------------------------
+
+Scripts in use:
+-----------------------------------------------------------------------------------
 checkMissing.pl		- Cross-checks files and parameter lines to see 
 			if any simulations have been missed.
-checksims		- Deprecated: counts data files on each node of a cluster.
-dist_params		- Deprecated: Distributes separate parameter 
-			files to each node.
-dosim			- Mark the first available line in a parameter 
-			file and return it.
-forall			- Deprecated, use dsh: run command on all nodes.
-forallrsh		- Deprecated, use dsh: run command on all nodes using rsh.
+create_perlhash_param_db- Creates a Perl database with a .db extension from a parameter file.
+dosim			- Mark the first available line in a parameter file and return it.
+dosimnum		- Return the desired row from a parameter file.
 lockLinuxFile		- Request mutual exclusive lock on a file and run a command.
 paramRanges.txt		- Example parameter definition file for brute force search.
 paramScan.pl		- Parameter file generator for brute force search. 
 			Reads the parameter definition file.
 qcountcpus		- Asks SGE how many CPUs are running.
 rc.sh			- Jaeger Lab startup script to set up paths, etc.
-runbatch		- Deprecated: Runs genesis repeatedly until all 
-			parameter rows are processed. Use qsub as shown 
-			above with one of the sge_* scripts.
-runbatchenv		- Deprecated: Same as runbatch, but passes parameters
-			to Genesis through an environment variable.
-runbatchremain		- Deprecated: Same as runbatch, but runs as many processes
-			as to finish the remaining rows in a parameter file.
 run_genesis.sh		- Simple SGE submission script that runs a Genesis script 
 			without refering to a parameter file.
-sge_perllock_local.sh	- Deprecated: SGE submission script that uses network
-			file locking to access rows of a central parameter file.
+sge_matlab.sh		- SGE submission script for matlab jobs. See example.
 sge_perllock.sh		- SGE submission script, same as *_local.sh above, but
 			uses ssh to connect to master node and request file locking.
 sge_perllock_test.sh	- Empty SGE submission script for testing purposes. Waits 
@@ -54,7 +93,23 @@ sge_perllock_test.sh	- Empty SGE submission script for testing purposes. Waits
 splitparfile		- Split a parameter file into two parts.
 takebacksim		- Unmarks the last executed parameter row.
 
+Deprecated scripts (but maybe still useful):
+-----------------------------------------------------------------------------------
+checksims		- counts data files on each node of a cluster.
+dist_params		- Distributes separate parameter files to each node.
+forall			- Deprecated, use dsh: run command on all nodes.
+forallrsh		- Deprecated, use dsh: run command on all nodes using rsh.
+runbatch		- Deprecated: Runs genesis repeatedly until all 
+			parameter rows are processed. Use qsub as shown 
+			above with one of the sge_* scripts.
+runbatchenv		- Deprecated: Same as runbatch, but passes parameters
+			to Genesis through an environment variable.
+runbatchremain		- Deprecated: Same as runbatch, but runs as many processes
+			as to finish the remaining rows in a parameter file.
+sge_perllock_local.sh	- Deprecated: SGE submission script that uses network
+			file locking to access rows of a central parameter file.
+
 ---
-Cengiz Gunay
-2005/06/15
-cgunay@emory.edu 
+Cengiz Gunay <cgunay@emory.edu>
+Created: 2005/06/05
+$Id: README,v 1.5 2005/11/30 23:08:29 cengiz Exp $
