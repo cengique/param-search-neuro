@@ -4,6 +4,7 @@
 #$ -j y
 #$ -N sge_run
 #$ -S /bin/bash
+#$ -v BASH_ENV=
 
 # This sge job script executes matlab to read a designated script.
 # 
@@ -17,7 +18,7 @@
 # Description:
 #
 # Author: Cengiz Gunay <cgunay@emory.edu> 2005/11/29
-# $Id: sge_matlab.sh,v 1.1 2005/11/30 22:53:15 cengiz Exp $
+# $Id: sge_matlab.sh,v 1.2 2005/12/20 00:01:38 cengiz Exp $
 
 # Need to source our own rc file. >:O
 source $HOME/.bashrc
