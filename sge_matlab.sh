@@ -18,7 +18,7 @@
 # Description:
 #
 # Author: Cengiz Gunay <cgunay@emory.edu> 2005/11/29
-# $Id: sge_matlab.sh,v 1.2 2005/12/20 00:01:38 cengiz Exp $
+# $Id: sge_matlab.sh,v 1.3 2006/02/03 20:48:06 cengiz Exp $
 
 # Need to source our own rc file. >:O
 source $HOME/.bashrc
@@ -41,7 +41,9 @@ fi
 
 trap exit INT
 
-matscript=`printf $1 $SGE_TASK_ID`
+matscript=`printf "$*" $SGE_TASK_ID`
+
+echo "Running matlab command: \"$matscript\""
 
 export GENESIS_PAR_ROW
 
@@ -54,7 +56,7 @@ fi
 #[ ! -r $matscript ] && echo "Cannot read script file $matscript, ending." && exit -1;
 
 # Run genesis 
-time matlab -nodesktop -nosplash -r $matscript -nodisplay
+time matlab -nodesktop -nosplash -r "$matscript" -nodisplay
 
 [ "$?" != "0" ] && echo "Matlab run failed, terminating job!" && exit -1
 
