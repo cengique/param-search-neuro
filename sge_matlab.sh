@@ -18,7 +18,7 @@
 # Description:
 #
 # Author: Cengiz Gunay <cgunay@emory.edu> 2005/11/29
-# $Id: sge_matlab.sh,v 1.3 2006/02/03 20:48:06 cengiz Exp $
+# $Id: sge_matlab.sh,v 1.4 2006/02/25 00:32:59 cengiz Exp $
 
 # Need to source our own rc file. >:O
 source $HOME/.bashrc
@@ -32,7 +32,7 @@ if [ -z "$1" ]; then
    echo "Need to specify Matlab script."
    echo ""
    echo "Usage: "
-   echo "   $0 matlab_command"
+   echo "   qsub [-t 1:n] $0 matlab_command"
    echo 
    echo "matlab_command: Command to run in each job. If contains a '%d', "
    echo "		it is replaced with the job index."
@@ -53,10 +53,10 @@ if [[ $SGE_TASK_ID < 126 ]]; then
    awk 'BEGIN {system("sleep " rand() * 20)}'
 fi
 
-#[ ! -r $matscript ] && echo "Cannot read script file $matscript, ending." && exit -1;
+# Run Matlab
+# (if wanted, this can be added, too:  -logfile sge_matlab.o$JOB_ID.$SGE_TASK_ID)
+time matlab -nodesktop -nosplash -r "$matscript" -nodisplay -nojvm
 
-# Run genesis 
-time matlab -nodesktop -nosplash -r "$matscript" -nodisplay
 
 [ "$?" != "0" ] && echo "Matlab run failed, terminating job!" && exit -1
 
