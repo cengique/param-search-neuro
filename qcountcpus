@@ -1,1 +1,27 @@
-qstat -f | grep " [0-9]/[0-9] " | awk '{print $3}' | awk -F/ 'BEGIN{u=0; n=0} {n=n+$2; u=u+$1} END{print "Currently used CPUs: " u "/" n}'
+#! /bin/bash
+
+# Script to asses overall load of the cluster.
+# Cengiz Gunay <cengique@users.sf.net> 2006/06/12
+
+function queue_stats () {
+  qstat_f=$1
+  queue_name=$2
+
+  queue_lines=`echo "$qstat_f" | grep "$queue_name"`
+  num_nodes=$[`echo "$queue_lines" | wc -l`]
+  cpus=`echo "$queue_lines" | awk '{print $3}' | awk -F/ 'BEGIN{u=0; n=0} {n=n+$2; u=u+$1} END{print u "/" n}'`
+
+  #echo -e "Queue: $queue_name, \t#nodes: $num_nodes, \tCPUs used: $cpus"
+  #echo -e "$cpus CPUs used in $num_nodes nodes of queue $queue_name"
+  echo -e "$cpus\t$num_nodes\t$queue_name"
+}
+
+qstat_f=`qstat -f`
+
+#echo "uniques queues:"
+queues=`echo "$qstat_f" | cut -d\  -f1 | grep "\@" | cut -d\@ -f1 | sort -u`
+
+echo -e "CPUS\t#NODES\tQUEUE"
+for queue_name in $queues; do
+  queue_stats "$qstat_f" "$queue_name"
+done
