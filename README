@@ -22,6 +22,8 @@ and monitor jobs, start from the "man sge_intro" manual page.
 
 Use the "qsub" command to submit jobs to the SGE.
 
+Genesis users must copy the /home/jaegerlab/.simrc file into their home directory.
+
 ----------------------------------------
 2. EXAMPLES
 ----------------------------------------
@@ -35,6 +37,11 @@ with 440 trials.
 440 rows and 11 parameters in file exc-subset-simple-scan-2.par.
 
 Your job 22538.1-440:1 ("sge_run") has been submitted.
+---
+
+GENESIS Example with Parameter File 1 (using the fast-run queue):
+---
+$ sge_submit setup_newscan.g exc-subset-simple-scan-2.par -l immediate=TRUE
 ---
 
 GENESIS Example with Parameter File 2:
@@ -67,7 +74,30 @@ $ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perllock.sh my_gen_script.g my_cond
 will launch 100 jobs processing the given parameter file.
 
 ----------------------------------------
-3. LIST OF ALL SCRIPTS
+3. COMMONLY USED SGE COMMANDS
+----------------------------------------
+
+$ qcountcpus
+will give you a list of queues and the number of CPUs currently available in each.
+
+$ qstat
+will give you a list of all scheduled jobs on the cluster.
+
+$ qstat | grep yourusername
+will only show the lines with your jobs.
+
+$ qstat -f
+will show the status of all nodes on the cluster.
+
+$ qstat -j jobnumber
+will give you detailed info about your job, including error messages.
+
+$ qmod -cj jobnumber
+will clear the error state of a job and let it re-run.
+
+
+----------------------------------------
+4. LIST OF ALL SCRIPTS
 ----------------------------------------
 
 Scripts in use:
@@ -112,4 +142,4 @@ sge_perllock_local.sh	- Deprecated: SGE submission script that uses network
 ---
 Cengiz Gunay <cgunay@emory.edu>
 Created: 2005/06/05
-$Id: README,v 1.5 2005/11/30 23:08:29 cengiz Exp $
+$Id: README,v 1.6 2006/06/21 18:43:28 cengiz Exp $
