@@ -97,7 +97,22 @@ will clear the error state of a job and let it re-run.
 
 
 ----------------------------------------
-4. LIST OF ALL SCRIPTS
+4. PRIORITIES
+----------------------------------------
+
+$ qsub -p <priority> ...
+will specify that the priority of the current job. 
+
+Priority convention for the fast_run queue:
+Job time	Priority
+------------------------
+<1hr		0
+1-5 hrs		-100
+5-24 hrs	-200
+> 24 hrs	not appropriate for fast_run 
+
+----------------------------------------
+5. LIST OF ALL SCRIPTS
 ----------------------------------------
 
 Scripts in use:
@@ -142,4 +157,4 @@ sge_perllock_local.sh	- Deprecated: SGE submission script that uses network
 ---
 Cengiz Gunay <cgunay@emory.edu>
 Created: 2005/06/05
-$Id: README,v 1.6 2006/06/21 18:43:28 cengiz Exp $
+$Id: README,v 1.7 2006/06/22 15:50:58 cengiz Exp $
