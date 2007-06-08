@@ -57,9 +57,9 @@ $ qsub ~jaegerlab/brute_scripts/run_genesis.sh my_gen_script.g
 
 MATLAB Example 1:
 ---
-$ qsub -t 1:60 ~jaegerlab/brute_scripts/sge_matlab.sh load_part%d
+$ qsub -t 1:60 ~jaegerlab/brute_scripts/sge_matlab.sh calculate(%d)
 ---
-This will call load_part1, load_part2, etc. in each matlab process.
+This will call the matlab functions calculate(1), calculate(2), ... etc. in each job.
 
 MATLAB Example 2:
 ---
@@ -157,4 +157,4 @@ sge_perllock_local.sh	- Deprecated: SGE submission script that uses network
 ---
 Cengiz Gunay <cgunay@emory.edu>
 Created: 2005/06/05
-$Id: README,v 1.7 2006/06/22 15:50:58 cengiz Exp $
+$Id: README,v 1.8 2007/06/08 18:18:20 cengiz Exp $
