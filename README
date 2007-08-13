@@ -14,8 +14,11 @@ CONTENTS:
 Add the following line in your ~/.bashrc file to adjust your 
 path for Jaegerlab settings:
 --- CUT FROM HERE ---
-. ~jaegerlab/brute_scripts/rc.sh
+. ~jaegerlab/brute_scripts/rc-ellipse.sh
 --- CUT TO HERE ---
+
+(the above is for ellipse.hpc.emory.edu; use rc.sh for
+ the old cluster clust.cc.emory.edu)
 
 To learn about the Sun Grid Engine (SGE) on how to submit 
 and monitor jobs, start from the "man sge_intro" manual page. 
@@ -157,4 +160,4 @@ sge_perllock_local.sh	- Deprecated: SGE submission script that uses network
 ---
 Cengiz Gunay <cgunay@emory.edu>
 Created: 2005/06/05
-$Id: README,v 1.8 2007/06/08 18:18:20 cengiz Exp $
+$Id: README,v 1.9 2007/08/13 18:49:09 cengiz Exp $
