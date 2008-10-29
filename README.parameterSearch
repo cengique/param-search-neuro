@@ -1,0 +1,116 @@
+// ************************************************************
+// Readme for running simulations.
+// ---
+// Anca Doloc-Muhu, 2008/08/14
+// ************************************************************
+
+
+
+To start the simulation you must first make some arrangements. This file explains how to do these arrangements step by step. The files needed for them are included in this directory and explained at each step.
+
+Short description.
+-----------------
+This setting is for simulations run on cluster, for which we give the parameters of the model outside the model in an ASCII input file, in a very convenient format (4 formats accepted at this time). This input file is transformed into another file containing all the possible parameter combinations, with each combination on one line. Further, each line will furnish input parameters for each simulation.
+
+
+
+Steps for running simulations on local machine.
+===============================================
+(1) Prepare an ASCII file input_ASCII_file.tx (here, called paramLists.txt) that contains your input data. 
+	Format for this file (each line is read in a param):
+		 1. Additive increments
+		 	param_name range_low range_high num_steps
+		 2. Multiplicative increments
+		 	param_name base_val *mul_factor ^num_steps
+		 3. Choose from a list
+			param_name [ val1 val2 ... ]
+		 4. Independent counter (indicates trial number)
+			param_name start_val ++ [increment]
+	and, the last line is standard: "trial 1 ++"
+
+	E.g, for LEECH the paramLista.txt looks like this (option 3, list):
+		eLeak [ -0.065 -0.055 -0.050 -0.040 -0.030 ]
+		gBar1 [ 0 -0.3 -0.6 0.2 0.4 ]
+		gBar2 [ 0 -0.3 -0.6 0.2 0.4 ]
+		gBar3 [ 0 -0.3 -0.6 0.2 0.4 ]
+		gBar4 [ 0 -0.3 -0.6 0.2 0.4 ]
+		gBar5 [ 0 -0.3 -0.6 0.2 0.4 ]
+		gBar6 [ 0 -0.3 -0.6 0.2 0.4 ]
+		gBar7 [ 0 -0.3 -0.6 0.2 0.4 ]
+		trial 1 ++
+-----------------------------------------------------------------------------------
+
+(2) Obtain parameter file containing all combinations of the parameters from the input file (from 1, above).For this, use command:
+		>./paramScanSingle.pl name_param_file < input_ASCII_file.txt
+	E.g.:
+		>./paramScanSingle.pl all_sim_comb < paramLists.txt
+
+	will create all_sim_comb.par file which contains on each line a combination of the (model) parameters.
+	Note: The Perl script file paramScanSingle.pl reads the input_ASCII_file.txt and creates the parameter combinations file all_sim_comb.par. The first line of this file contains the number of combinations (or, no. of lines in the file, equivalent to the no. of simulations) and the (no. of parameters + 1). The rest of the lines are all the same: "list of parameters no_of_line 0". E.g.(first 5 lines of the all_sim_comb.par file):
+		390625 9
+		-0.065 0 0 0 0 0 0 0 1 0
+		-0.055 0 0 0 0 0 0 0 2 0
+		-0.050 0 0 0 0 0 0 0 3 0
+		-0.040 0 0 0 0 0 0 0 4 0
+		-0.030 0 0 0 0 0 0 0 5 0
+	
+	Note: you can find the usage of the perl script by typing:
+		>./paramScanSingle.pl
+------------------------------------------------------------------------------------
+
+(3) Create a db that is a hashtable for the simulations:
+		>./create_perlhash_param_db all_sim_comb.par 
+
+	The output of the command is all_sim_comb.par.db (*.par.db) file which is a db containing a hashtable. This db provides fast access to a simulation based on its hash key from the hashtable (reading its corresponding line from the parameter file is a much slower way of accessing it).
+
+	Note: The db file is a very large file.So, before creating it, one needs to make sure there is enough space on the disk.
+
+	Note: You can access data from the database by using dosimnum script:
+		>./dosimnum    //gives the usage of the command
+	      
+	      For accessing line 8 (the 8th combination of param) of the all_sim_comb.par.db db:
+		>./dosimnum param_file line_no //general syntax
+	      e.g.:
+		>./dosimnum all_sim_comb.par 8
+------------------------------------------------------------------------------------
+
+(4) Use Genesis environment variables to set the row no. (obtained via db) to be passed as input param to the genesis file:
+	>export GENESIS_PAR_ROW=`path/dosimnum param_file line_no`   //general syntax
+	
+	E.g.:
+	>export GENESIS_PAR_ROW=`~/Desktop/ElementalOscillator/scriptsPrepareSimulations/dosimnum all_sim_comb.par 8`
+------------------------------------------------------------------------------------
+
+(5) Finally, ready to run a simulation on local machine (here, for LEECH):
+	>time lgenesis -nox -batch -notty genesis_script 2>&1 
+	E.g.:
+		>time lgenesis -nox -batch -notty mainSimScript_ElementalOscillator.g 2>&1 
+
+	Note: For LEECH: mainSimScript_ElementalOscillator.g was modified from its original version (testarray.g, done by Adam Weaver) to accept the simulation parameters from outside (as explained above, from the initial input ASCII file, paramLists.txt). 
+------------------------------------------------------------------------------------
+
+
+Steps for running simulations on cluster nodes.
+===============================================
+
+(1) Performs steps (1)-(3) from above. To run the cluster scripts you need to have them (sge_submit and sge_perlhash.sh), and the following data:
+	- input_ASCII_file.txt (e.g., paramLists.txt)
+	- param_file (e.g., all_sim_comb.par) - created as above
+    Also, make sure you have enough space for the db.
+
+(2) Submit jobs to cluster nodes:
+	> ./sge_submit    //gives general info on how to run the script
+
+	E.g., run in the script directory:
+	>./sge_submit  mainSimScript_ElementalOscillator.g all_sim_comb.par [options-to-qsub]
+
+	The sge_submit:
+		- creates the db from the param_file
+		- submits to a specific cluster node a specific simulation (according to its line number); For this, it calls sge_perlhash.sh script with your_genesis_script_to_run and param_file.
+	The sge_perlhash.sh:
+		- sources your bash
+		- set up the current directory for the simulation
+		- sets up a Genesis environment variable to a specific row no.
+		- finally, runs simulation by passing this variable as param to your_genesis_script (here, mainSimScript_ElementalOscillator.g)
+---------------------------------------------------------------------------------------
+
