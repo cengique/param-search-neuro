@@ -76,6 +76,12 @@ $ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perllock.sh my_gen_script.g my_cond
 
 will launch 100 jobs processing the given parameter file.
 
+Any executable with Parameter File:
+---
+$ create_perlhash_param_db my_conductances.par
+$ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perlhash_execcmd.sh myexec my_conductances.par
+---
+
 ----------------------------------------
 3. COMMONLY USED SGE COMMANDS
 ----------------------------------------
@@ -160,4 +166,4 @@ sge_perllock_local.sh	- Deprecated: SGE submission script that uses network
 ---
 Cengiz Gunay <cgunay@emory.edu>
 Created: 2005/06/05
-$Id: README,v 1.9 2007/08/13 18:49:09 cengiz Exp $
+$Id: README,v 1.10 2013/08/02 18:48:13 cengiz Exp $
