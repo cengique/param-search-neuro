@@ -1,4 +1,4 @@
-README FILE FOR JAEGER LAB CLUSTER SCRIPTS
+Parallel parameter search scripts for neuron models
 -------------------------------------------
 
 CONTENTS:
@@ -11,14 +11,11 @@ CONTENTS:
 1. INTRO/REQUIREMENTS
 ----------------------------------------
 
-Add the following line in your ~/.bashrc file to adjust your 
-path for Jaegerlab settings:
+Based on the cluster you will use, you probably need to add commands to 
+your ~/.bashrc file to adjust your path. For example:
 --- CUT FROM HERE ---
 . ~jaegerlab/brute_scripts/rc-ellipse.sh
 --- CUT TO HERE ---
-
-(the above is for ellipse.hpc.emory.edu; use rc.sh for
- the old cluster clust.cc.emory.edu)
 
 To learn about the Sun Grid Engine (SGE) on how to submit 
 and monitor jobs, start from the "man sge_intro" manual page. 

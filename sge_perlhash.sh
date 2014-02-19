@@ -64,5 +64,3 @@ GENESIS_PAR_ROW=`dosimnum $parfile $SGE_TASK_ID`
 
 echo "Ending job"
 date
-
-
