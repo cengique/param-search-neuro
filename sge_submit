@@ -22,5 +22,5 @@ echo
 
 create_perlhash_param_db $parfile
 echo 
-qsub -t 1:$trials $* /home/jaegerlab/brute_scripts/sge_perlhash.sh $genfile $parfile
+qsub -t 1:$trials $* ./sge_perlhash.sh $genfile $parfile
 

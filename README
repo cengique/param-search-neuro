@@ -141,6 +141,7 @@ sge_perllock.sh		- SGE submission script, same as *_local.sh above, but
 			uses ssh to connect to master node and request file locking.
 sge_perllock_test.sh	- Empty SGE submission script for testing purposes. Waits 
 			for a few seconds instead of running Genesis.
+sge_test_multoutputs.sh - Empty SGE script to test submission to cluster.
 splitparfile		- Split a parameter file into two parts.
 takebacksim		- Unmarks the last executed parameter row.
 
@@ -163,4 +164,3 @@ sge_perllock_local.sh	- Deprecated: SGE submission script that uses network
 ---
 Cengiz Gunay <cgunay@emory.edu>
 Created: 2005/06/05
-$Id: README,v 1.10 2013/08/02 18:48:13 cengiz Exp $
