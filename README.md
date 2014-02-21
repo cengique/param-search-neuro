@@ -7,14 +7,14 @@ Parallel parameter search scripts for simulating neuron models
 Contents:
 ---------
 
-0. Introduction
-1. Parameter search tutorial
-2. Other command usage examples
-3. Commonly used SGE commands
-4. Cluster queue priorities
-5. Organization of files
+1. Introduction
+2. Parameter search tutorial
+3. Other command usage examples
+4. Commonly used SGE commands
+5. Cluster queue priorities
+6. Organization of files
 
-0. Introduction:
+1. Introduction:
 ---------
 
 To start the simulation you must first make some arrangements. This
@@ -28,7 +28,7 @@ and monitor jobs, start from the "man sge_intro" manual page.
 Use the "qsub" command to submit jobs to the SGE.
 
 
-1. Parameter search tutorial
+2. Parameter search tutorial
 -----------------
 
 This setting is for simulations run on clusters, for which we give the
@@ -43,7 +43,8 @@ Steps for running simulations on local machine.
 -------------------------------------------------
 
 1. Prepare an ASCII file input_ASCII_file.tx (here, called paramLists.txt) that contains your input data. 
-	Format for this file (each line is read in a param):
+
+ Format for this file (each line is read in a param):
 		 1. Additive increments
 		 	param_name range_low range_high num_steps
 		 2. Multiplicative increments
