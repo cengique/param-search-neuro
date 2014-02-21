@@ -7,8 +7,11 @@ TODO
   - param-search-neuro (1 vote - AEH)
 - Rename files and create subdirs to organize:
   - sge_scripts/:
-  	sge_perlhash.sh => sim_genesis_1par.sh
-	run_genesis.sh => sim_genesis.sh
+  	sge_perlhash.sh 	=> sim_genesis_1par.sh
+	sge_perlhash_execcmd.sh => sim_exec_1par.sh
+	run_genesis.sh 		=> sim_genesis.sh
+	sge_matlab		=> run_matlab.sh
+	sge_submit
 	checkmissing.pl
 	qcountcpus
   - param_file/:

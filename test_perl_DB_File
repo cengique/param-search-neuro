@@ -1,2 +1,0 @@
-perl -e 'use DB_File;'
-
