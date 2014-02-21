@@ -18,6 +18,8 @@
 # To choose a different Genesis binary modify the GENESIS environment variable. 
 # Default binary is "genesis".
 
+# Example:
+# qsub -t 1:1310 ~/brute_scripts/sge_perlhash.sh setup_cip_act_handtune.g blocked_gps0501-03_2.par
 
 # Author: Cengiz Gunay <cgunay@emory.edu> 2005/06/29
 # $Id: sge_perlhash.sh,v 1.4 2006/02/27 16:47:46 cengiz Exp $
@@ -25,15 +27,11 @@
 # Modified by Anca Doloc-Mihu <adolocm@emory.edu>, 2008/08/14
 # switched to lgenesis (leech-genesis)
 
-# Example:
-# qsub -t 1:1310 ~/brute_scripts/sge_perlhash.sh setup_cip_act_handtune.g blocked_gps0501-03_2.par
 
 # Need to source our own rc file. >:O
 source $HOME/.bashrc
 
 curdir=`pwd`
-
-
 
 echo -n "Starting job $SGE_TASK_ID/$SGE_TASK_LAST from parameter file $2 on $HOSTNAME at "
 date

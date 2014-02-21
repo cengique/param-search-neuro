@@ -2,7 +2,7 @@ TODO
 ----------
 - Make a new branch and clean all obsolete files in there
 - New project name suggestions: 
-  - paramSimNeuro
+  - paramSimNeuro (1 vote - ADM)
   - paramSearchNeuro
   - param-search-neuro (1 vote - AEH)
 - Rename files and create subdirs to organize:
@@ -24,5 +24,5 @@ TODO
 	lockLinuxFile
 	rc.sh => jaegerlab-rc.sh
    	all under deprecated
-- Import the two READMEs into one README.md's (or wiki files?)
+- Import the two READMEs into one README.md (or wiki files?)
 - Convert SGE keywords/syntax to MOAB/PBS as needed
