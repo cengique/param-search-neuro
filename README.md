@@ -155,12 +155,12 @@ each line will furnish input parameters for each simulation.
 
 		>./sge_submit  mainSimScript_ElementalOscillator.g all_sim_comb.par [options-to-qsub]
 
-	The sge_submit:
+	The `sge_submit`:
 
 	- creates the db from the `param_file`
 	- submits to a specific cluster node a specific simulation (according to its line number); For this, it calls `sim_genesis_1par.sh` script with `your_genesis_script_to_run` and `param_file`.
 
-	The sge_perlhash.sh:
+	The `sim_genesis_1par.sh`:
 
 	- sources your bash startup script
 	- set up the current directory for the simulation
@@ -188,35 +188,35 @@ GENESIS Example with Parameter File 1 (using the fast-run queue):
 
 GENESIS Example with Parameter File 2:
 
-		$ create_perlhash_param_db my_conductances.par
-		$ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perlhash.sh my_gen_script.g my_conductances.par
+		$ par2db.pl my_conductances.par
+		$ qsub -t 1:100 ~/scripts/sim_genesis_1par.sh my_gen_script.g my_conductances.par
 
 GENESIS Example w/o Parameter File:
 
-		$ qsub ~jaegerlab/brute_scripts/run_genesis.sh my_gen_script.g
+		$ qsub ~/scripts/sim_genesis.sh my_gen_script.g
 
 MATLAB Example 1:
 
-		$ qsub -t 1:60 ~jaegerlab/brute_scripts/sge_matlab.sh calculate(%d)
+		$ qsub -t 1:60 ~/scripts/sim_matlab.sh calculate(%d)
 
-This will call the matlab functions calculate(1), calculate(2), ... etc. in each job.
+This will call the matlab functions `calculate(1), calculate(2),` ... etc. in each job.
 
 MATLAB Example 2:
 
-		$ qsub -t 1:60 ~jaegerlab/brute_scripts/sge_matlab.sh load_part%d
+		$ qsub -t 1:60 ~/scripts/sim_matlab.sh load_part%d
 
 This will call `load_part1, load_part2, ..., load_part60` in each matlab process.
 
 Example of old method that sshs to master node for locking:
 
-		$ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perllock.sh my_gen_script.g my_conductances.par
+		$ qsub -t 1:100 ~/scripts/sim_genesis_1par.sh my_gen_script.g my_conductances.par
 
 will launch 100 jobs processing the given parameter file.
 
 Any executable with Parameter File:
 
-		$ create_perlhash_param_db my_conductances.par
-		$ qsub -t 1:100 ~jaegerlab/brute_scripts/sge_perlhash_execcmd.sh myexec my_conductances.par
+		$ par2db my_conductances.par
+		$ qsub -t 1:100 ~/scripts/sim_exec_1par.sh myexec my_conductances.par
 
 
 3. Commonly used SGE commands
