@@ -15,7 +15,9 @@
 # The reason this script does not modify the parameter file is to avoid
 # race conditions that occur when writing to the parameter file concurrently.
 
-# To choose a different Genesis binary modify the $GENESIS environment variable.
+# To choose a different Genesis binary modify the GENESIS environment variable. 
+# Default binary is "genesis".
+
 
 # Author: Cengiz Gunay <cgunay@emory.edu> 2005/06/29
 # $Id: sge_perlhash.sh,v 1.4 2006/02/27 16:47:46 cengiz Exp $
@@ -31,8 +33,7 @@ source $HOME/.bashrc
 
 curdir=`pwd`
 
-# Default value is genesis
-${GENESIS:=genesis}
+
 
 echo -n "Starting job $SGE_TASK_ID/$SGE_TASK_LAST from parameter file $2 on $HOSTNAME at "
 date
@@ -60,8 +61,13 @@ GENESIS_PAR_ROW=`dosimnum $parfile $SGE_TASK_ID`
 
 [ "$?" != "0" ] && echo "Cannot read parameter row $SGE_TASK_ID, ending." && exit -1;
 
+# if given, run prerun_script with parameters
+[ -n "$3" ] && $3 "$GENESIS_PAR_ROW" || \
+    { echo "Failed to run $3 \"$GENESIS_PAR_ROW\"";
+      exit -1; }
+
 # Run genesis 
-/usr/bin/time -f  "=== Time of simulation: elapsed = %E...kernel cpu = %S... user cpu = %U... cpu alloc = %P ====" $GENESIS -nox -batch -notty $genfile
+/usr/bin/time -f  "=== Time of simulation: elapsed = %E...kernel cpu = %S... user cpu = %U... cpu alloc = %P ====" ${GENESIS:=genesis} -nox -batch -notty $genfile
 
 [ "$?" != "0" ] && echo "GENESIS run failed, terminating job!" && exit -1
 
