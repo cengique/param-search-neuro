@@ -4,7 +4,7 @@ TODO
 - New project name suggestions: 
   - paramSimNeuro
   - paramSearchNeuro
-  - param-search-neuro
+  - param-search-neuro (1 vote - AEH)
 - Rename files and create subdirs to organize:
   - sge_scripts/:
   	sge_perlhash.sh => sim_genesis_1par.sh
@@ -25,3 +25,4 @@ TODO
 	rc.sh => jaegerlab-rc.sh
    	all under deprecated
 - Import the two READMEs into one README.md's (or wiki files?)
+- Convert SGE keywords/syntax to MOAB/PBS as needed
