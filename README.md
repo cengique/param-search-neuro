@@ -77,11 +77,11 @@ each line will furnish input parameters for each simulation.
 
 2. Obtain parameter file containing all combinations of the parameters from the input file (from 1, above).For this, use command:
 
-			>./def2par.pl name_param_file < input_ASCII_file.txt
+			$ ./def2par.pl name_param_file < input_ASCII_file.txt
 
 	E.g.:
 
-			>./def2par.pl all_sim_comb < paramLists.txt
+			$ ./def2par.pl all_sim_comb < paramLists.txt
 
 	will create `all_sim_comb.par` file which contains on each line a combination of the (model) parameters.
 	
@@ -96,12 +96,12 @@ each line will furnish input parameters for each simulation.
 	
 	*Note*: you can find the usage of the perl script by typing:
 
-		>./def2par.pl
+		$ ./def2par.pl
 
 
 3. Create a db that is a hashtable for the simulations:
 
-		>./par2db.pl all_sim_comb.par 
+		$ ./par2db.pl all_sim_comb.par 
 
 	The output of the command is `all_sim_comb.par.db` (`*.par.db`) file which is a database (db) containing a hashtable. This db provides fast access to a simulation based on its hash key from the hashtable (reading its corresponding line from the parameter file is a much slower way of accessing it).
 
@@ -109,32 +109,32 @@ each line will furnish input parameters for each simulation.
 
 	*Note*: You can access data from the database by using dosimnum script:
 
-		>./get_1par.pl    //gives the usage of the command
+		$ ./get_1par.pl    //gives the usage of the command
 
 	 For accessing line 8 (the 8th combination of param) of the all_sim_comb.par.db db:
 
-		>./get_1par.pl param_file line_no //general syntax
+		$ ./get_1par.pl param_file line_no //general syntax
 
    e.g.:
 
-		>./get_1par.pl all_sim_comb.par 8
+		$ ./get_1par.pl all_sim_comb.par 8
 
 4. Use Genesis environment variables to set the row no. (obtained via db) to be passed as input param to the genesis file:
 
-		>export GENESIS_PAR_ROW=`path/get_1par.pl param_file line_no`   //general syntax
+		$ export GENESIS_PAR_ROW=`path/get_1par.pl param_file line_no`   //general syntax
 	
 	E.g.:
 
-		>export GENESIS_PAR_ROW=`~/scripts/get_1par.pl all_sim_comb.par 8`
+		$ export GENESIS_PAR_ROW=`~/scripts/get_1par.pl all_sim_comb.par 8`
 
 
 5. Finally, ready to run a simulation on local machine (here, for LEECH):
 
-		>time lgenesis -nox -batch -notty genesis_script 2>&1 
+		$ time lgenesis -nox -batch -notty genesis_script 2>&1 
 
 	E.g.:
 
-		>time lgenesis -nox -batch -notty mainSimScript_ElementalOscillator.g 2>&1 
+		$ time lgenesis -nox -batch -notty mainSimScript_ElementalOscillator.g 2>&1 
 
 	*Note*: For LEECH, `mainSimScript_ElementalOscillator.g` was modified from its original version (`testarray.g`, done by Adam Weaver) to accept the simulation parameters from outside (as explained above, from the initial input ASCII file, `paramLists.txt`). 
 
@@ -149,11 +149,11 @@ each line will furnish input parameters for each simulation.
 
 2. Submit jobs to cluster nodes:
 
-		> ./sge_submit    //gives general info on how to run the script
+		$ ./sge_submit    //gives general info on how to run the script
 
 	E.g., run in the script directory:
 
-		>./sge_submit  mainSimScript_ElementalOscillator.g all_sim_comb.par [options-to-qsub]
+		$ ./sge_submit  mainSimScript_ElementalOscillator.g all_sim_comb.par [options-to-qsub]
 
 	The `sge_submit`:
 
