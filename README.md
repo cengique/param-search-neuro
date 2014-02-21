@@ -157,15 +157,15 @@ each line will furnish input parameters for each simulation.
 
 	The sge_submit:
 
-		- creates the db from the `param_file`
-		- submits to a specific cluster node a specific simulation (according to its line number); For this, it calls `sim_genesis_1par.sh` script with `your_genesis_script_to_run` and `param_file`.
+	- creates the db from the `param_file`
+	- submits to a specific cluster node a specific simulation (according to its line number); For this, it calls `sim_genesis_1par.sh` script with `your_genesis_script_to_run` and `param_file`.
 
 	The sge_perlhash.sh:
 
-		- sources your bash
-		- set up the current directory for the simulation
-		- sets up a Genesis environment variable to a specific row no.
-		- finally, runs simulation by passing this variable as param to `your_genesis_script` (here, `mainSimScript_ElementalOscillator.g`)
+	- sources your bash startup script
+	- set up the current directory for the simulation
+	- sets up a Genesis environment variable to a specific row no.
+	- finally, runs simulation by passing this variable as param to `your_genesis_script` (here, `mainSimScript_ElementalOscillator.g`)
 
 
 2. Other command usage examples
@@ -269,34 +269,34 @@ Priority convention for the fast_run queue:
 
 * param_file/: Script to manage parameter files.
 
-	def2parN.pl	Generates N parameter files from a definition file.
-	def2par.pl	Generates a parameter file from a definition file.
-	get_1par.pl	Gets one parameter line from file using index.
-	par2db.pl	Creates binary database from parameter file.
-	paramDefMult.txt	Example parameter definition file with multiplicative rule.
-	paramDef.txt	Example parameter definition file.
-	splitparfile	Splits parameter file into several pieces.
+ - `def2parN.pl` Generates N parameter files from a definition file.
+ - `def2par.pl`	Generates a parameter file from a definition file.
+ - `get_1par.pl` Gets one parameter line from file using index.
+ - `par2db.pl` Creates binary database from parameter file.
+ - `paramDefMult.txt` Example parameter definition file with multiplicative rule.
+ - `paramDef.txt` Example parameter definition file.
+ - `splitparfile` Splits parameter file into several pieces.
 
 * sge_scripts/:	SGE submission scripts.
 
-	sge_submit	Submits SGE jobs based on given parameter file.
-	sim_exec_1par.sh	SGE script that runs a generic executable with 1 parameter line.
-	sim_genesis_1par.sh	SGE script that runs Genesis with 1 parameter line.
-	sim_genesis.sh	SGE script that runs a Genesis.
-	sim_matlab.sh	SGE script that runs Matlab.
-	sim_null.sh	Blank SGE script for testing purposes. Creates output files.
+ - `sge_submit` Submits SGE jobs based on given parameter file.
+ - `sim_exec_1par.sh` SGE script that runs a generic executable with 1 parameter line.
+ - `sim_genesis_1par.sh` SGE script that runs Genesis with 1 parameter line.
+ - `sim_genesis.sh` SGE script that runs a Genesis.
+ - `sim_matlab.sh` SGE script that runs Matlab.
+ - `sim_null.sh` Blank SGE script for testing purposes. Creates output files.
 
 * maintenance/:	Scripts for cluster and file maintenance.
 
-	checkMissing.pl	Cross-checks files and parameter lines to see if any simulations have been missed.
-	checkParamValGenesisFile	Checks missing Genesis files from parameter names and values.
-	checkTrialIdxGenesisFile	Checks missing Genesis files from trial values.
-	dsh_nodes.sh	Distributed shell (dsh) to execute arbitrary command on nodes.
-	qcountcpus	Report number of running CPUs from qstat output.
-	scp_tar_fast.sh	Copies files using SSH and tar.
+ - `checkMissing.pl` Cross-checks files and parameter lines to see if any simulations have been missed.
+ - `checkParamValGenesisFile` Checks missing Genesis files from parameter names and values.
+ - `checkTrialIdxGenesisFile` Checks missing Genesis files from trial values.
+ - `dsh_nodes.sh` Distributed shell (dsh) to execute arbitrary command on nodes.
+ - `qcountcpus` Report number of running CPUs from qstat output.
+ - `scp_tar_fast.sh` Copies files using SSH and tar.
 
-* obsolete/:		Scripts no longer used. 
+* obsolete/: Scripts no longer used. 
 
-	(Contains former file-locking system for when race conditions
-	existed for parameter files contained indicators of execution.)
+ (Contains former file-locking system for when race conditions
+ existed for parameter files contained indicators of execution.)
 
