@@ -8,7 +8,7 @@
 
 # This SGE job script reads a designated row from the parameter file and executes
 # genesis to process it. It uses a fast hashtable access to read the parameter 
-# row from a database created with the create_perlhash_param_db script.
+# row from a database created with the par2db.pl script.
 # Notice that, this script does not mark the row as processed in the original 
 # parameter file. One needs to use checkMissing.pl script to find out which 
 # rows are already done.
@@ -19,17 +19,16 @@
 # Default binary is "genesis".
 
 # Example:
-# qsub -t 1:1310 ~/brute_scripts/sge_perlhash.sh setup_cip_act_handtune.g blocked_gps0501-03_2.par
+# qsub -t 1:1310 ~/brute_scripts/sim_genesis_1par.sh setup_cip_act_handtune.g blocked_gps0501-03_2.par
 
 # Author: Cengiz Gunay <cgunay@emory.edu> 2005/06/29
-# $Id: sge_perlhash.sh,v 1.4 2006/02/27 16:47:46 cengiz Exp $
 
 # Modified by Anca Doloc-Mihu <adolocm@emory.edu>, 2008/08/14
 # switched to lgenesis (leech-genesis)
 
 
 # Need to source our own rc file. >:O
-source $HOME/.bashrc
+# source $HOME/.bashrc
 
 curdir=`pwd`
 
@@ -55,7 +54,7 @@ parfile=$2
 export GENESIS_PAR_ROW
 
 # Read parameter values.
-GENESIS_PAR_ROW=`dosimnum $parfile $SGE_TASK_ID`
+GENESIS_PAR_ROW=`get_1par.pl $parfile $SGE_TASK_ID`
 
 [ "$?" != "0" ] && echo "Cannot read parameter row $SGE_TASK_ID, ending." && exit -1;
 

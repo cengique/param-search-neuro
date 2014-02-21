@@ -27,7 +27,7 @@ untie %param_rows;
 sub usage {
   print "Usage: $0 parameter_file row_num\n\n" .
     "Reads a row from the parameter database using a hash-based \n" .
-      "access without searching all rows. Run create_perlhash_param_db \n" .
+      "access without searching all rows. Run par2db.pl \n" .
 	"to initialize the database file from a text-based parameter file.\n" .
 	"Row numbers start from 1.\n";
 }

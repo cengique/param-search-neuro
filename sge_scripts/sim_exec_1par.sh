@@ -10,7 +10,7 @@
 
 # This sge job script reads a designated row from the parameter file and executes
 # genesis to process it. It uses a fast hashtable access to read the parameter 
-# row from a database created with the create_perlhash_param_db script.
+# row from a database created with the par2db.pl script.
 # Notice that, this script does not mark the row as processed in the original 
 # parameter file. One needs to use checkMissing.pl script to find out which 
 # rows are already done.
@@ -51,7 +51,7 @@ parfile=$2
 #fi
 
 # Read parameter values.
-PAR_ROW=`dosimnum $parfile $SGE_TASK_ID`
+PAR_ROW=`get_1par.pl $parfile $SGE_TASK_ID`
 
 [ "$?" != "0" ] && echo "Cannot read parameter row $SGE_TASK_ID, ending." && exit -1;
 

@@ -20,7 +20,7 @@ trials=`head -1 $parfile | cut -d " " -f 1`
 echo "GENESIS script: $genfile; param. file: $parfile with $trials trials."
 echo
 
-create_perlhash_param_db $parfile
+par2db.pl $parfile
 echo 
-qsub -t 1:$trials $* ./sge_perlhash.sh $genfile $parfile
+qsub -t 1:$trials $* ./sim_genesis_1par.sh $genfile $parfile
 
