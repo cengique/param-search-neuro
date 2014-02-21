@@ -1,5 +1,27 @@
 TODO
 ----------
-- Make a new branch and put all obsolete files in there
-- Rename files and create subdirs to organize
-- Import READMEs into README.md's or wiki files
+- Make a new branch and clean all obsolete files in there
+- New project name suggestions: 
+  - paramSimNeuro
+  - paramSearchNeuro
+  - param-search-neuro
+- Rename files and create subdirs to organize:
+  - sge_scripts/:
+  	sge_perlhash.sh => sim_genesis_1par.sh
+	run_genesis.sh => sim_genesis.sh
+	checkmissing.pl
+	qcountcpus
+  - param_file/:
+	create_perlhash_param_db => par2db.pl
+	paramRanges.txt => param_def.txt
+	paramScan.pl => def2parN.pl
+	paramScanSingle.pl => def2par.pl
+	splitparfile => splitpar
+	dosimnum => get_1par.pl
+  - obsolete/:
+	dosim
+	sge_perllock
+	lockLinuxFile
+	rc.sh => jaegerlab-rc.sh
+   	all under deprecated
+- Import the two READMEs into one README.md's (or wiki files?)
