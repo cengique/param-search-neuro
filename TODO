@@ -3,5 +3,7 @@ TODO
 - New project name suggestions:
   - paramSimNeuro (1 vote - ADM)
   - paramSearchNeuro
-  - param-search-neuro (1 vote - AEH)
+  - param-search-neuro (1 vote - AEH, changed!)
 - Convert SGE keywords/syntax to MOAB/PBS as needed
+- Point to Pandora params_tests_db object scaleParamsOneRow,
+   scanParamsAllRows, makeGenesisParFile functions
