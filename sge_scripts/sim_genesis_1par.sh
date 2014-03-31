@@ -59,9 +59,9 @@ GENESIS_PAR_ROW=`get_1par.pl $parfile $SGE_TASK_ID`
 [ "$?" != "0" ] && echo "Cannot read parameter row $SGE_TASK_ID, ending." && exit -1;
 
 # if given, run prerun_script with parameters
-[ -n "$3" ] && $3 "$GENESIS_PAR_ROW" || \
-    { echo "Failed to run $3 \"$GENESIS_PAR_ROW\"";
-      exit -1; }
+[ -n "$3" ] && ( $3 "$GENESIS_PAR_ROW" || \
+    ( echo "Failed to run $3 \"$GENESIS_PAR_ROW\"" && \
+      exit -1; ) )
 
 # Run genesis 
 /usr/bin/time -f  "=== Time of simulation: elapsed = %E...kernel cpu = %S... user cpu = %U... cpu alloc = %P ====" ${GENESIS:=genesis} -nox -batch -notty $genfile
