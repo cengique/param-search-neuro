@@ -1,9 +1,9 @@
 Parallel parameter search scripts for simulating neuron models
 ======================================================================
 
-*Documentation and modifications by Anca Doloc-Mihu <adolocm AT emory.edu>, 2008/08/14*
+*Documentation and modifications by Anca Doloc-Mihu (adolocm AT emory.edu), 2008/08/14*
 
-*Original scripts by Cengiz Gunay <cgunay AT emory.edu>, 2005/06/05*
+*Original scripts by Cengiz Gunay (cgunay AT emory.edu), 2005/06/05*
 
 ### Contents:
 
