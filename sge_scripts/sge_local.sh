@@ -10,7 +10,7 @@ if [ -z "$2" ]; then
    echo "   $0 row_range sim_script [args...]"
    echo 
    echo " row_range: Parameter row range (X:Y) to process."
-   echo " sim_script [args...]: Script to call with arguments after setting SGE_TASK_ID."
+   echo " sim_script [args...]: Script to call with arguments after setting SGE_TASK_ID (e.g. sim_genesis_1par.sh)."
    echo 
    exit -1
 fi
