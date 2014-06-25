@@ -30,7 +30,7 @@ die "Cannot read number of rows and parameters from file $param_file.\n"
 my $num_rows = $1;
 my $num_params = $2;
 
-print "$num_rows rows and $num_params parameters in file $param_file.\n";
+print "$num_rows rows and $num_params parameters in file $param_file. \nReading all available data anyway.\n";
 
 # Loop over all lines
 my $row_num = 1;
