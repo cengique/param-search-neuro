@@ -51,10 +51,11 @@ trap exit INT
 genfile=$1
 parfile=$2
 
-export GENESIS_PAR_ROW
+export GENESIS_PAR_ROW GENESIS_PAR_NAMES
 
-# Read parameter values.
+# Read parameter values and names.
 GENESIS_PAR_ROW=`get_1par.pl $parfile $SGE_TASK_ID`
+GENESIS_PAR_NAMES=`awk '{ printf $0 " "}' < ${parfile%.par}.txt`
 
 [ "$?" != "0" ] && echo "Cannot read parameter row $SGE_TASK_ID, ending." && exit -1;
 
