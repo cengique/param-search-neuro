@@ -1,5 +1,8 @@
 #! /bin/bash
 
+# To choose a different Genesis binary modify the GENESIS environment variable. 
+# Default binary is "genesis".
+
 # Need to source our own rc file. 
 source $HOME/.bashrc
 
@@ -17,7 +20,7 @@ fi
 genfile=$1
 
 # Run genesis
-genesis -nox -batch -notty $genfile
+/usr/bin/time -f  "=== Time of simulation: elapsed = %E...kernel cpu = %S... user cpu = %U... cpu alloc = %P ====" ${GENESIS:=genesis} -nox -batch -notty $genfile
 
 echo "Ending job"
 date
