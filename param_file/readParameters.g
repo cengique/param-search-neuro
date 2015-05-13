@@ -7,18 +7,20 @@ values and GENESIS_PAR_NAMES for parameter names. If names are not
 provided, parameter values can still be accessed via an index.
 
 Example for setting environment variables in Bash:
-export GENESIS_PAR_ROW="1 2 3"
-export GENESIS_PAR_NAMES="a b c"
+  export GENESIS_PAR_ROW="1 2 3"
+  export GENESIS_PAR_NAMES="a b c"
 (which means a=1, b=2, and c=3.)
+Then call 
+  genesis myscript.g
+which must include this file.
 
-In GENESIS, initialize first by calling read_env_params. And access
-the parameters either by name:
+In your GENESIS script, initialize first by calling
+read_env_params. And access the parameters either by name:
   par_a = {get_param_byname "a"}
 or by index:
   par_b = {get_param 2}
 
-Also special versions of these exist for maximal conductance
-parameters:
+Special versions exist for maximal conductance parameters:
   set_gmax_par_byname /soma chanSK gmax_SK
 which sets the gmax of /soma/chanSK element from parameter named
 gmax_SK. Same can be done with parameter index:
