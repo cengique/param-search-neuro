@@ -276,8 +276,9 @@ Priority convention for the fast_run queue:
  - `paramDefMult.txt` Example parameter definition file with multiplicative rule.
  - `paramDef.txt` Example parameter definition file.
  - `splitparfile` Splits parameter file into several pieces.
+ - `readParameters.g` GENESIS functions for extracting parameters from environment variables.
 
-* sge_scripts/:	SGE submission scripts.
+* sge_scripts/:	Sun Grid Engine (SGE) submission scripts.
 
  - `sge_submit` Submits SGE jobs based on given parameter file.
  - `sge_local.sh` Locally runs an array job of one of the below sim_* scripts.
@@ -287,6 +288,9 @@ Priority convention for the fast_run queue:
  - `sim_genesis.sh` SGE script that runs a Genesis.
  - `sim_matlab.sh` SGE script that runs Matlab.
  - `sim_null.sh` Blank SGE script for testing purposes. Creates output files.
+
+* moab_scripts/: [Moab](http://www.adaptivecomputing.com/) submission scripts.
+ - `moab_matlab.sh` Script for submitting a Matlab job.
 
 * maintenance/:	Scripts for cluster and file maintenance.
 
