@@ -273,5 +273,4 @@ Priority convention for the fast_run queue:
 * maintenance/:	Scripts for cluster and file maintenance.
 * obsolete/: Scripts no longer used. 
 
-See the subdirectories for additional documentation about the files and
-scripts they contain.
+Subdirectories contain additional documentation.
