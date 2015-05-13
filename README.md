@@ -267,42 +267,11 @@ Priority convention for the fast_run queue:
 5. Organization of files
 ----------------------------------------
 
-* param_file/: Script to manage parameter files.
-
- - `def2parN.pl` Generates N parameter files from a definition file.
- - `def2par.pl`	Generates a parameter file from a definition file.
- - `get_1par.pl` Gets one parameter line from file using index.
- - `par2db.pl` Creates binary database from parameter file.
- - `paramDefMult.txt` Example parameter definition file with multiplicative rule.
- - `paramDef.txt` Example parameter definition file.
- - `splitparfile` Splits parameter file into several pieces.
- - `readParameters.g` GENESIS functions for extracting parameters from environment variables.
-
+* param_file/: Shell and simulation scripts to manage parameter files.
 * sge_scripts/:	Sun Grid Engine (SGE) submission scripts.
-
- - `sge_submit` Submits SGE jobs based on given parameter file.
- - `sge_local.sh` Locally runs an array job of one of the below sim_* scripts.
- - `sge_local_multi.sh` Locally runs sge_local.sh by splitting the array into multiple threads.
- - `sim_exec_1par.sh` SGE script that runs a generic executable with 1 parameter line.
- - `sim_genesis_1par.sh` SGE script that runs Genesis with 1 parameter line.
- - `sim_genesis.sh` SGE script that runs a Genesis.
- - `sim_matlab.sh` SGE script that runs Matlab.
- - `sim_null.sh` Blank SGE script for testing purposes. Creates output files.
-
 * moab_scripts/: [Moab](http://www.adaptivecomputing.com/) submission scripts.
- - `moab_matlab.sh` Script for submitting a Matlab job.
-
 * maintenance/:	Scripts for cluster and file maintenance.
-
- - `checkMissing.pl` Cross-checks files and parameter lines to see if any simulations have been missed.
- - `checkParamValGenesisFile` Checks missing Genesis files from parameter names and values.
- - `checkTrialIdxGenesisFile` Checks missing Genesis files from trial values.
- - `dsh_nodes.sh` Distributed shell (dsh) to execute arbitrary command on nodes.
- - `qcountcpus` Report number of running CPUs from qstat output.
- - `scp_tar_fast.sh` Copies files using SSH and tar.
-
 * obsolete/: Scripts no longer used. 
 
- (Contains former file-locking system for when race conditions
- existed for parameter files contained indicators of execution.)
-
+See the subdirectories for additional documentation about the files and
+scripts they contain.

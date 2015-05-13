@@ -8,3 +8,8 @@
  - `paramDef.txt` Example parameter definition file.
  - `splitparfile` Splits parameter file into several pieces.
  - `readParameters.g` GENESIS functions for extracting parameters from environment variables.
+
+To create parameter files from within Matlab, also see the [Pandora
+toolbox](https://github.com/cengique/pandora-matlab). Use the
+`scaleParamsOneRow`, `scanParamsAllRows`, `makeGenesisParFile` functions in
+the `params_tests_db` object.
