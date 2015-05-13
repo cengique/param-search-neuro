@@ -1,4 +1,4 @@
-### param_file/: Shell and simulation scripts to manage parameter files.
+### Shell and simulation scripts to manage parameter files.
 
  - `def2parN.pl` Generates N parameter files from a definition file.
  - `def2par.pl`	Generates a parameter file from a definition file.
