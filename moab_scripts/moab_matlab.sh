@@ -10,9 +10,6 @@
 # Adapted from Georgia Institute of Technology PACE cluster manuals.
 # Author: Cengiz Gunay <cengique@users.sf.net>, 2015-05-13
 
-#PBS -j oe
-#PBS -o Matlab.output.$PBS_JOBID
-
 cd $PBS_O_WORKDIR
 
 # Create the tmp directory for matlab parallel
@@ -26,7 +23,7 @@ if [ -z "$matlab_cmd" ]; then
 fi
 
 echo "Running Matlab command line:"
-echo $matlab_cmd
+echo "$matlab_cmd"
 
 # Run Matlab (remove the setup step if you don't have this)
 /usr/bin/time -f  "=== Run time: elapsed= %E...kernel cpu= %S... user cpu= %U... cpu alloc= %P ====" \
