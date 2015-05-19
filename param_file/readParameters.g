@@ -52,8 +52,8 @@ function read_env_params
   if ({strcmp {parrow} ""} == 0)
     echo "*********************************************************************"
     echo "Error: This script needs to read the parameters from the environment "
-    echo "        variable GENESIS_PAR_ROW. Set the variable prior to running"
-    echo "        the script. Aborting simulation."
+    echo "        variable GENESIS_PAR_ROW and GENESIS_PAR_NAMES. Set them prior "
+    echo "        to running the script. Aborting simulation."
     echo "*********************************************************************"
     quit
   end
@@ -63,7 +63,7 @@ function read_env_params
 
 	if ({strcmp {parnames} ""} != 0)
 		echo "Reading environment variable GENESIS_PAR_NAMES and creating parameter"
-		echo "element /@params with fields corresponding to parameter names and values."
+		echo "element /@params with fields corresponding to parameter names and values:"
 
 		int param_num
 
@@ -74,6 +74,7 @@ function read_env_params
 				str param_name = {getarg {arglist {parnames}} -arg {param_num}}
 				addfield {param_name}
 				setfield {param_name} {get_param {param_num}}
+				echo {param_name} "=" {get_param {param_num}}
 			end
 		pope
 	end
