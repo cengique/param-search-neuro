@@ -1,32 +1,42 @@
 Parallel parameter search scripts for simulating neuron models
 ======================================================================
 
-*Documentation and modifications by Anca Doloc-Mihu (adolocm AT emory.edu), 2008/08/14*
 
-*Original scripts by Cengiz Gunay (cgunay AT emory.edu), 2005/06/05*
+Directory organization
+----------------------------------------
 
-### Contents:
+* param_file/: Common scripts for running simulations and for maintaining parameter files.
+* sge_scripts/:	Scripts specific to the Sun Grid Engine (SGE).
+* pbs_scripts/: Scripts specific to PBS/[Moab](http://www.adaptivecomputing.com/).
+* maintenance/:	Miscellaneous cluster and file maintenance scripts.
+* obsolete/: Scripts no longer used. 
+
+Subdirectories contain additional documentation.
+
+### Tutorial Contents:
 
 1. Introduction
 2. Parameter search tutorial
 3. Other command usage examples
 4. Commonly used SGE commands
 5. Cluster queue priorities
-6. Organization of files
 
-1. Introduction:
+1. Introduction
 ---------
 
-To start the simulation you must first make some arrangements. This
-file explains how to do these arrangements step by step. The files
+This tutorial demonstrates how to run a set of simulations on a high-performance cluster based on a parameter set. Commands and examples are given for running neuron simulations in [GENESIS](http://www.genesis-sim.org) and for cluster schedulers SGE and PBS/MOAB. However, the workflow and common scripts provide a general method, and could be adapted to other platforms.
+
+Before running simulations on a cluster, you must first make some preparation. This
+tutorial explains how to do these preparations step by step. The files
 needed for them are included in this directory and explained at each
 step.
 
 To learn about the Sun Grid Engine (SGE) on how to submit 
 and monitor jobs, start from the "man sge_intro" manual page. 
 
-Use the "qsub" command to submit jobs to the SGE.
+Use the "qsub" command to submit jobs to the SGE or PBS/MOAB.
 
+To use these scripts, either add the paths `param_file/` and your cluster-specific script directory (e.g., `pbs_scripts`) in your search PATH, or refer to these scripts with full paths.
 
 2. Parameter search tutorial
 -----------------
@@ -207,12 +217,6 @@ MATLAB Example 2:
 
 This will call `load_part1, load_part2, ..., load_part60` in each matlab process.
 
-Example of old method that sshs to master node for locking:
-
-		$ qsub -t 1:100 ~/scripts/sim_genesis_1par.sh my_gen_script.g my_conductances.par
-
-will launch 100 jobs processing the given parameter file.
-
 Any executable with Parameter File:
 
 		$ par2db my_conductances.par
@@ -246,7 +250,6 @@ will give you detailed info about your job, including error messages.
 		
 will clear the error state of a job and let it re-run.
 
-
 4. Cluster queue priorities
 ----------------------------------------
 
@@ -263,14 +266,9 @@ Priority convention for the fast_run queue:
 		5-24 hrs	-200
 		> 24 hrs	not appropriate for fast_run 
 
+Modification history:
+----------------------
 
-5. Organization of files
-----------------------------------------
-
-* param_file/: Shell and simulation scripts to manage parameter files.
-* sge_scripts/:	Sun Grid Engine (SGE) submission scripts.
-* moab_scripts/: [Moab](http://www.adaptivecomputing.com/) submission scripts.
-* maintenance/:	Scripts for cluster and file maintenance.
-* obsolete/: Scripts no longer used. 
-
-Subdirectories contain additional documentation.
+- *Reorganization by Cengiz Gunay (cengique AT users.sf.net), 2015/05/27*
+- *Documentation and modifications by Anca Doloc-Mihu (adolocm AT emory.edu), 2008/08/14*
+- *Original scripts by Cengiz Gunay (cengique AT users.sf.net), 2005/06/05*
