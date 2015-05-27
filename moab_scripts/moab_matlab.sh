@@ -1,4 +1,4 @@
-# MOAB script for submitting an arbitrary Matlab job
+# MOAB/PBS script for submitting an arbitrary Matlab job
 #
 # Example usage: 
 # matlab_cmd="setup(),myfunc(1,2,3)" qsub -v matlab_cmd moab_matlab.sh
@@ -9,8 +9,6 @@
 # 
 # Adapted from Georgia Institute of Technology PACE cluster manuals.
 # Author: Cengiz Gunay <cengique@users.sf.net>, 2015-05-13
-
-cd $PBS_O_WORKDIR
 
 # Create the tmp directory for matlab parallel
 RUNDIR=~/scratch/simhe/jobID_$PBS_JOBID/
