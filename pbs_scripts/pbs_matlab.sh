@@ -1,8 +1,10 @@
 # MOAB/PBS script for submitting an arbitrary Matlab job
 #
 # Example usage: 
-# matlab_cmd="setup(),myfunc(1,2,3)" qsub -v matlab_cmd moab_matlab.sh
-# (Note that you need to escape special characters in matlab_cmd)
+# matlab_cmd="setup(),myfunc(1,2,3)" qsub -v matlab_cmd pbs_custom.sh
+#
+# (Note that you need to escape special characters in
+# matlab_cmd. pbs_custom.sh is modified from pbs_example_template.sh.)
 #
 # It is better to make a separate local script to add your PBS
 # directives and then simply exec this script at the end of it.
