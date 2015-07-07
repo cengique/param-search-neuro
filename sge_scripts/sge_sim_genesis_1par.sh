@@ -26,8 +26,4 @@ if [ -z "$2" ]; then
    exit -1
 fi
 
-genfile=$1
-parfile=$2
-trial=$SGE_TASK_ID
-
-exec ../param_file/sim_genesis_1par.sh
+source ../param_file/sim_genesis_1par.sh $1 $2 $SGE_TASK_ID

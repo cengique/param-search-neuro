@@ -42,6 +42,4 @@ echo "=========================="
 cat $PBS_NODEFILE
 echo "=========================="
 
-trial=$PBS_ARRAYID
-
-exec ../param_file/sim_genesis_1par.sh
+source ../param_file/sim_genesis_1par.sh $genfile $parfile $PBS_ARRAYID
