@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Extracts arguments from PBS and passes execution to sim_genesis_1par.sh.
+# Extracts arguments from PBS and passes execution to
+# sim_genesis_1par.sh, which needs to be on the search PATH.
 
 # Modification history: 
 # - Cengiz Gunay <cengique@users.sf.net> 2015/05/26
