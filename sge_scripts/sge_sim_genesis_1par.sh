@@ -13,7 +13,7 @@ if [ -z "$2" ]; then
    echo "Need to specify GENESIS script and parameter file."
    echo ""
    echo "Direct usage: "
-   echo "   $0 genesis_script parameter_file [prerun_script]"
+   echo "   ${0##*/} genesis_script parameter_file [prerun_script]"
    echo 
    echo "prerun_script - If specified, this script is run and "
    echo "passed the parameters that were read."
