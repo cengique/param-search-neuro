@@ -21,8 +21,11 @@ Input arguments:
 
 See the corresponding scripts in the SGE and PBS directories for
 submission examples (e.g., sge_sim_genesis_1par.sh and
-pbs_sim_genesis_1par.sh). To choose a different Genesis binary
-modify the GENESIS environment variable. Default binary is "genesis".
+pbs_sim_genesis_1par.sh). To choose a different Genesis binary modify
+the GENESIS environment variable. Default binary is "genesis". Default
+Genesis command line arguments are "-nox -batch -notty" and can be
+overridden by assigning a value to the environment variable
+GENESIS_ARGS.
 
 Compatibility with older Genesis scripts: Notice that, this script
 does not mark the row as processed in the original parameter
@@ -68,7 +71,7 @@ GENESIS_PAR_NAMES=`awk '{ printf $0 " "}' < ${parfile%.par}.txt`
       exit -1; ) )
 
 # Run genesis 
-/usr/bin/time -f  "=== Time of simulation: elapsed = %E...kernel cpu = %S... user cpu = %U... cpu alloc = %P ====" ${GENESIS:=genesis} -nox -batch -notty $genfile
+/usr/bin/time -f  "=== Time of simulation: elapsed = %E...kernel cpu = %S... user cpu = %U... cpu alloc = %P ====" ${GENESIS:=genesis} ${GENESIS_ARGS:=-nox -batch -notty} $genfile
 
 [ "$?" != "0" ] && echo "GENESIS run failed, terminating job!" && exit -1
 
