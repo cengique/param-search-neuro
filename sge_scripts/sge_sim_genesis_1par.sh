@@ -26,4 +26,4 @@ if [ -z "$2" ]; then
    exit -1
 fi
 
-source ../param_file/sim_genesis_1par.sh $1 $2 $SGE_TASK_ID
+source ${0%/*}/../param_file/sim_genesis_1par.sh $1 $2 $SGE_TASK_ID
