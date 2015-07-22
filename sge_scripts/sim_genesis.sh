@@ -20,7 +20,7 @@ fi
 genfile=$1
 
 # Run genesis
-/usr/bin/time -f  "=== Time of simulation: elapsed = %E...kernel cpu = %S... user cpu = %U... cpu alloc = %P ====" ${GENESIS:=genesis} -nox -batch -notty $genfile
+/usr/bin/time -f  "=== Time of simulation: elapsed = %E...kernel cpu = %S... user cpu = %U... cpu alloc = %P ====" ${GENESIS:=genesis} ${GENESIS_ARGS:=-nox -batch -notty} $genfile
 
 echo "Ending job"
 date
