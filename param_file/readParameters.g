@@ -31,7 +31,8 @@ Cengiz Gunay <cengique@users.sf.net>, 2015-05-13
 */
 
 // constants
-float PI = 3.14159265359 
+float PI = 3.14159265359 // watch out defaults.g has a conflicting low-fi definition 
+float maxscale = 50.0 // Conductance and field maximal scale value
 
 // Set globals
 str parrow
@@ -117,15 +118,25 @@ function get_gmax (path)
 end
 
 // convert from integer param value to specific gmax value by
-// dividing by 50 and then scale by gmax in path (gmax's from P file are the maximal values)
+// dividing by maxscale and then scale by gmax in path (gmax's from P file are the maximal values)
 // (already scaled by compartment area)
 function get_gmax_spec (path, param_num)
-  return { { {get_param {param_num} } / 50 } * { get_gmax {path} } }
+  return { {get_param {param_num} } * { get_gmax {path} } / maxscale }
 end
 
 // same thing by name
 function get_gmax_spec_byname (path, param_name)
-  return { { {get_param_byname {param_name} } / 50 } * { get_gmax {path} } }
+  return { {get_param_byname {param_name} } * { get_gmax {path} } / maxscale }
+end
+
+// same thing for fields, by param number
+function get_field_par (path, field, param_num)
+  return { {get_param {param_num} } * { getfield {path} {field}} / maxscale }
+end
+
+// same thing for fields, by param name
+function get_field_par_byname (path, field, param_name)
+  return { {get_param_byname {param_name} } * { getfield {path} {field}} / maxscale }
 end
 
 // Takes specific gmax value and applies to channel 
@@ -145,6 +156,16 @@ function set_gmax_par_byname (path, chan, param_name)
   set_gmax {path} {chan} {get_gmax_spec_byname {path}/{chan} {param_name}}
 end
 
+// Set a compartment field value (EM, RM, etc) from parameter
+function set_comp_field_par (path, field, param_num)
+  setfield {path} {field} {get_field_par {path} {field} {param_num}}
+end
+
+// by parameter name
+function set_comp_field_par_byname (path, field, param_name)
+  setfield {path} {field} {get_field_par_byname {path} {field} {param_name}}
+end
+
 // Set gmax for all neurites from param
 function set_neurites_par (path, chan, param_num)
   set_gmax_par {path}/neurite1 { chan } { param_num }
@@ -157,6 +178,13 @@ function set_neurites_par_byname (path, chan, param_name)
   set_gmax_par_byname {path}/neurite1 { chan } { param_name }
   set_gmax_par_byname {path}/neurite2 { chan } { param_name }
   set_gmax_par_byname {path}/neurite3 { chan } { param_name }
+end
+
+// Set gmax for all neurites from param name
+function set_neurites_field_par_byname (path, field, param_name)
+  set_comp_field_par_byname {path}/neurite1 { field } { param_name }
+  set_comp_field_par_byname {path}/neurite2 { field } { param_name }
+  set_comp_field_par_byname {path}/neurite3 { field } { param_name }
 end
 
 // Set gmax for all neurites from value
