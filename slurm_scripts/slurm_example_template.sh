@@ -12,7 +12,7 @@
 #SBATCH -t 01:30:00
 
 # Change default search path
-#export PATH=mypath:$PATH
+export PATH=~cgunay/param-search-neuro/slurm_scripts:$PATH
 
 # Then pass the execution to one of the scripts in this directory.
 exec slurm_array_null.sh
