@@ -4,15 +4,15 @@
 
 # Example PBS directives. Modify as necessary:
 #SBATCH --job-name="my_testrun"
-#SBATCH --output="Matlab.output.%j.%N"
+#SBATCH --output="Null.output.%j.%N"
 #SBATCH --partition=compute
-#SBATCH --nodes=2
-#SBATCH --ntasks-per-node=24
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
 #SBATCH --export=ALL
 #SBATCH -t 01:30:00
 
 # Change default search path
-export PATH=mypath:$PATH
+#export PATH=mypath:$PATH
 
 # Then pass the execution to one of the scripts in this directory.
-exec pbs_matlab.sh
+exec slurm_array_null.sh

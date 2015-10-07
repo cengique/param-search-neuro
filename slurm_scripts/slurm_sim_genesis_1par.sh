@@ -25,7 +25,7 @@ function usage()
 
 function errorout() { echo "$@" 1>&2; }
 
-#cd $PBS_O_WORKDIR
+cd $SLURM_SUBMIT_DIR
 
 genfile=$1
 parfile=$2
