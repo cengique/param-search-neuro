@@ -14,5 +14,6 @@
 # Change default search path
 export PATH=~cgunay/param-search-neuro/slurm_scripts:$PATH
 
-# Then pass the execution to one of the scripts in this directory.
-exec slurm_array_null.sh
+# Then pass the execution to one of the scripts in this directory 
+# including additional arguments on the sbatch command line.
+exec slurm_array_null.sh $*
