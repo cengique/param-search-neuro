@@ -48,4 +48,4 @@ echo "=========================="
 cat $SLURM_JOB_NODELIST
 echo "=========================="
 
-source sim_genesis_1par.sh $genfile $parfile $PBS_ARRAYID
+source sim_genesis_1par.sh $genfile $parfile $SLURM_ARRAY_TASK_ID
