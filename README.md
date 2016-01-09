@@ -44,6 +44,7 @@ Directory organization
 
 * `param_file/`: Common scripts for running simulations and for maintaining parameter files.
 * `pbs_scripts/`: Scripts specific to PBS/[Moab](http://www.adaptivecomputing.com/).
+* `slurm_scripts/`: Scripts specific to [SLURM](https://computing.llnl.gov/linux/slurm/).
 * `sge_scripts/`: Scripts specific to the Sun Grid Engine (SGE).
 * `maintenance/`: Miscellaneous cluster and file maintenance scripts.
 * `obsolete/`: Scripts no longer used. 
