@@ -12,3 +12,46 @@
  - `sim_genesis.sh` SGE script that runs a Genesis.
  - `sim_matlab.sh` SGE script that runs Matlab.
  - `sim_null.sh` Blank SGE script for testing purposes. Creates output files.
+
+Commonly used SGE commands
+----------------------------------------
+
+		$ qcountcpus
+		
+will give you a list of queues and the number of CPUs currently available in each.
+
+		$ qstat
+		
+will give you a list of all scheduled jobs on the cluster.
+
+		$ qstat | grep yourusername
+		
+will only show the lines with your jobs.
+
+		$ qstat -f
+		
+will show the status of all nodes on the cluster.
+
+		$ qstat -j jobnumber
+		
+will give you detailed info about your job, including error messages.
+
+		$ qmod -cj jobnumber
+		
+will clear the error state of a job and let it re-run.
+
+Cluster queue priorities
+----------------------------------------
+
+		$ qsub -p <priority> ...
+
+will specify that the priority of the current job. 
+
+Priority convention for the fast_run queue:
+
+		Job time	Priority
+		------------------------
+		<1hr		0
+		1-5 hrs		-100
+		5-24 hrs	-200
+		> 24 hrs	not appropriate for fast_run 

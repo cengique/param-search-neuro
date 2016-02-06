@@ -62,7 +62,7 @@ export GENESIS_PAR_ROW GENESIS_PAR_NAMES
 GENESIS_PAR_ROW=`get_1par.pl $parfile $trial`
 [ "$?" != "0" ] && echo "Cannot read parameter row $trial, ending." && exit -1;
 
-GENESIS_PAR_NAMES=`awk '{ printf $0 " "}' < ${parfile%.par}.txt`
+GENESIS_PAR_NAMES=`awk '{ printf $1 " "}' < ${parfile%.par}.txt`
 [ "$?" != "0" ] && echo "Cannot read parameter names from file ${parfile%.par}.txt, ending." && exit -1;
 
 # if given, run prerun_script with parameters

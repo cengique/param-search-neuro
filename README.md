@@ -1,25 +1,61 @@
 Parallel parameter search scripts for simulating neuron models
 ======================================================================
 
+`param-search-neuro` is a collection of scripts to simulate a neuron
+model for each of the entries in a parameter set. Evaluating the model
+at different places in its parameter space allows mapping its output
+and also creating [neuronal model
+databases](http://link.springer.com/referenceworkentry/10.1007/978-1-4614-7320-6_165-1).
+
+We provide a formal method to run a set of parameters locally or on
+high-performance computing (HPC) platforms by defining the concept of a
+parameter file. This is a text file that contains a matrix of numbers,
+where columns represent different parameters and rows represent
+different model runs or trials. The trials can then be simulated
+serially or in parallel through the use of the provided
+scripts. Scripts here allow constructing the parameter file in a
+variety of ways, including but not limited to selecting all
+combinations of discrete values of each parameter. Parameter files can
+also be easily imported from other sources.
+
+The key advantage of using these scripts is being able to compile text
+parameter files into binary objects and then reaching parameters of
+one trial in constant time (i.e. _O(1)_). This allows out-of-order
+execution of simulations, which is especially useful in parallel
+environments because it eliminates the need to prevent race
+conditions, which is often difficult.
+
+HPC platforms supported:
+* Sun Grid Engine (SGE)
+* PBS/MOAB
+* SLURM
+
+Running parameter sets on parallel environments is demonstrated using
+the GENESIS simulator here, but in principle it is very easy to run
+any other simulator. Parameters are passed to individual GENESIS
+processes using environmental variables, but they can also be passed
+on the command line.
+
+See the tutorial below and the examples in the relevant subdirectories
+for up-to-date usage.
 
 Directory organization
 ----------------------------------------
 
 * `param_file/`: Common scripts for running simulations and for maintaining parameter files.
 * `pbs_scripts/`: Scripts specific to PBS/[Moab](http://www.adaptivecomputing.com/).
+* `slurm_scripts/`: Scripts specific to [SLURM](https://computing.llnl.gov/linux/slurm/).
 * `sge_scripts/`: Scripts specific to the Sun Grid Engine (SGE).
 * `maintenance/`: Miscellaneous cluster and file maintenance scripts.
 * `obsolete/`: Scripts no longer used. 
 
 Subdirectories contain additional documentation.
 
-### Tutorial Contents:
+### Tutorial:
 
 1. Introduction
 2. Parameter search tutorial
 3. Other command usage examples
-4. Commonly used SGE commands
-5. Cluster queue priorities
 
 1. Introduction
 ---------
@@ -178,7 +214,7 @@ each line will furnish input parameters for each simulation.
 	- finally, runs simulation by passing this variable as param to `your_genesis_script` (here, `mainSimScript_ElementalOscillator.g`)
 
 
-2. Other command usage examples
+2. Other command usage examples (with SGE, but can be adapted to other platforms)
 ----------------------------------------
 
 GENESIS Example with Parameter File 1:
@@ -222,53 +258,9 @@ Any executable with Parameter File:
 		$ par2db my_conductances.par
 		$ qsub -t 1:100 ~/scripts/sim_exec_1par.sh myexec my_conductances.par
 
-
-3. Commonly used SGE commands
-----------------------------------------
-
-		$ qcountcpus
-		
-will give you a list of queues and the number of CPUs currently available in each.
-
-		$ qstat
-		
-will give you a list of all scheduled jobs on the cluster.
-
-		$ qstat | grep yourusername
-		
-will only show the lines with your jobs.
-
-		$ qstat -f
-		
-will show the status of all nodes on the cluster.
-
-		$ qstat -j jobnumber
-		
-will give you detailed info about your job, including error messages.
-
-		$ qmod -cj jobnumber
-		
-will clear the error state of a job and let it re-run.
-
-4. Cluster queue priorities
-----------------------------------------
-
-		$ qsub -p <priority> ...
-
-will specify that the priority of the current job. 
-
-Priority convention for the fast_run queue:
-
-		Job time	Priority
-		------------------------
-		<1hr		0
-		1-5 hrs		-100
-		5-24 hrs	-200
-		> 24 hrs	not appropriate for fast_run 
-
 Modification history:
 ----------------------
 
-- *Reorganization by Cengiz Gunay (cengique AT users.sf.net), 2015/05/27*
+- *Reorganization by Cengiz Gunay (cengique AT users.sf.net), 2015-2016*
 - *Documentation and modifications by Anca Doloc-Mihu (adolocm AT emory.edu), 2008/08/14*
 - *Original scripts by Cengiz Gunay (cengique AT users.sf.net), 2005/06/05*
