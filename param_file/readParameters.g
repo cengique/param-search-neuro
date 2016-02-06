@@ -84,7 +84,12 @@ end
 
 // From the /@params element, return parameter by name
 function get_param_byname (param_name)
-  return {getfield /@params {param_name}}
+	if ( {exists /@params {param_name}} )
+		return {getfield /@params {param_name}}
+	else
+		echo "ERROR: At get_param_byname, parameter '"{param_name}"' not found in /@params structure!"
+		exit
+	end
 end
 
 // returns surface of compartment at path
