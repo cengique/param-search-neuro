@@ -4,7 +4,7 @@ if [ -z "$3" ]; then
    echo "Error: Missing arguments."
    echo ""
    echo "$0: Runs a parameter set locally on separate parallel thread by"
-   echo "splitting the job between multiple sge_local.sh runs. Outputs will "
+   echo "splitting the job between multiple run_local.sh runs. Outputs will "
    echo "be written to files named as '<sim_script>-X.out', where X is 1..N."
    echo
    echo "Usage: "
@@ -27,12 +27,16 @@ shift
 
 sim_script=$1
 
-echo "$par_range" | grep -qE '[0-9]+:[0-9]+' || \
-    ( echo "Error: Row range not recognized: $par_range" && exit -1 )
+function receive_range {
+    row_start=$1
+    row_end=$2
+    num_rows=$3
+}
 
-row_start=`echo "$par_range" | sed -e 's/\([0-9]\+\):[0-9]\+/\1/'`
-row_end=`echo "$par_range" | sed -e 's/[0-9]\+:\([0-9]\+\)/\1/'`
-num_rows=$[ $row_end - $row_start + 1 ]
+RANGES=`read_ranges.sh $par_range`
+[ "$?" != "0" ] && >&2 echo "Parameter range parsing failed." && exit -1
+
+receive_range $RANGES
 
 # Divide and run in the background
 echo "Starting $num_threads parallel sge_local.sh jobs."
@@ -40,7 +44,7 @@ for (( i = 0; i < $num_threads; i = $[ $i + 1 ] )); do
     this_start=$[ $row_start + $i * $num_rows / $num_threads]
     this_end=$[ $row_start + ($i + 1) * $num_rows / $num_threads - 1]
     echo "Running thread #$i with rows ${this_start}:$this_end"
-    sge_local.sh ${this_start}:$this_end $* &> $sim_script-$i.out &
+    run_local.sh ${this_start}:$this_end $* &> $sim_script-$i.out &
 done
 
 echo "Waiting for jobs to finish..."
