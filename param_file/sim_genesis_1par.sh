@@ -3,7 +3,7 @@
 function usage() {
     cat <<EOF 
 This script reads a designated row from the parameter file and
-executes genesis to process it. It uses a fast hashtable lookup to
+executes Genesis to process it. It uses a fast hashtable lookup to
 read the parameter row from a database created with the par2db.pl
 script. This script is independent of PBS or SGE systems and it is
 intended to be executed by SGE or PBS scripts in respective
@@ -15,7 +15,7 @@ ${0##*/} genfile parfile trial
 Input arguments:
   genfile: Genesis script (e.g., myfunc.g).
   parfile: Parameter file name (e.g., mymodel.par).
-  trial: Row number to read from parameter file (e.g., 1).
+  trial: Row number to read from parameter file (e.g., 1). If missing, read from PSN_TRIAL.
   prerun: (Optional) A script to run with the extracted parameters before
 	executing Genesis (e.g., checkMissing.sh).
 
@@ -44,31 +44,24 @@ EOF
 # - Cengiz Gunay <cgunay@emory.edu> 2005/06/29
 #	Original script.
 
-[ -z "$3" ] && echo -e "Error: Missing arguments, exiting.\n" && usage && exit -1;
+[ -z "$2" ] && echo -e "Error: Missing arguments, exiting.\n" && usage && exit -1;
 
 genfile=$1
 parfile=$2
-trial=$3
+trial=${3:-${PSN_TRIAL:?"Error: Missing trial argument and PSN_TRIAL is unset, exiting.\n"}} \
+    || usage;
 
 trap exit INT
 
 export GENESIS_PAR_ROW GENESIS_PAR_NAMES
 
-# Check parameter DB and, if not exists, create it. 
-[ -r "${parfile}.db" ] || ( echo "Creating missing database file from parameter file $parfile." \
-    && par2db.pl ${parfile} )
-
-# Read parameter values and names.
-GENESIS_PAR_ROW=`get_1par.pl $parfile $trial`
-[ "$?" != "0" ] && echo "Cannot read parameter row $trial, ending." && exit -1;
-
-GENESIS_PAR_NAMES=`awk '{ printf $1 " "}' < ${parfile%.par}.txt`
-[ "$?" != "0" ] && echo "Cannot read parameter names from file ${parfile%.par}.txt, ending." && exit -1;
+eval `get_genesis_pars.sh $parfile $trial` 
+[ -z "$GENESIS_PAR_ROW" ] && { echo "Failed to get parameters."; exit -1; }
 
 # if given, run prerun_script with parameters
 [ -n "$prerun" ] && ( $prerun "$GENESIS_PAR_ROW" || \
-    ( echo "Failed to run $3 \"$GENESIS_PAR_ROW\"" && \
-      exit -1; ) )
+    { echo "Failed to run $3 \"$GENESIS_PAR_ROW\""; \
+      exit -1; } )
 
 # Run genesis 
 /usr/bin/time -f  "=== Time of simulation: elapsed = %E...kernel cpu = %S... user cpu = %U... cpu alloc = %P ====" ${GENESIS:=genesis} ${GENESIS_ARGS:=-nox -batch -notty} $genfile
