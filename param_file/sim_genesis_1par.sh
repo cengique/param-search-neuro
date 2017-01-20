@@ -16,8 +16,13 @@ Input arguments:
   genfile: Genesis script (e.g., myfunc.g).
   parfile: Parameter file name (e.g., mymodel.par).
   trial: Row number to read from parameter file (e.g., 1). If missing, read from PSN_TRIAL.
-  prerun: (Optional) A script to run with the extracted parameters before
+
+Environment variables read
+  PRERUN: (Optional) A script to run with the extracted parameters before
 	executing Genesis (e.g., checkMissing.sh).
+  PSN_TRIAL: Trial number (see above).
+  PSN_PRINT: If set, print out Genesis command line instead of
+  executing for making batch files.
 
 See the corresponding scripts in the SGE and PBS directories for
 submission examples (e.g., sge_sim_genesis_1par.sh and
@@ -55,18 +60,25 @@ trap exit INT
 
 export GENESIS_PAR_ROW GENESIS_PAR_NAMES
 
-eval `get_genesis_pars.sh $parfile $trial` 
-[ -z "$GENESIS_PAR_ROW" ] && { echo "Failed to get parameters."; exit -1; }
+GENESIS_PARS=`get_genesis_pars.sh $parfile $trial` 
 
-# if given, run prerun_script with parameters
-[ -n "$prerun" ] && ( $prerun "$GENESIS_PAR_ROW" || \
-    { echo "Failed to run $3 \"$GENESIS_PAR_ROW\""; \
-      exit -1; } )
+if [ -v PSN_PRINT ]; then
+    # Just print out instead of executing
+    echo "$GENESIS_PARS ${GENESIS:=genesis} ${GENESIS_ARGS:=-nox -batch -notty} $genfile"
+else
+    eval $GENESIS_PARS
+    [ -z "$GENESIS_PAR_ROW" ] && { echo "Failed to get parameters."; exit -1; }
 
-# Run genesis 
-/usr/bin/time -f  "=== Time of simulation: elapsed = %E...kernel cpu = %S... user cpu = %U... cpu alloc = %P ====" ${GENESIS:=genesis} ${GENESIS_ARGS:=-nox -batch -notty} $genfile
+    # if given, run prerun_script with parameters
+    [ -n "$prerun" ] && ( $prerun "$GENESIS_PAR_ROW" || \
+	{ echo "Failed to run $3 \"$GENESIS_PAR_ROW\""; \
+	exit -1; } )
 
-[ "$?" != "0" ] && echo "GENESIS run failed, terminating job!" && exit -1
+    # Run genesis 
+    /usr/bin/time -f  "=== Time of simulation: elapsed = %E...kernel cpu = %S... user cpu = %U... cpu alloc = %P ====" ${GENESIS:=genesis} ${GENESIS_ARGS:=-nox -batch -notty} $genfile
 
-echo "Ending job"
-date
+    [ "$?" != "0" ] && echo "GENESIS run failed, terminating job!" && exit -1
+
+    echo "Ending job"
+    date
+fi
