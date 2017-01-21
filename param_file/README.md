@@ -12,10 +12,16 @@
 
  - `paramDefMult.txt` Example parameter definition file with multiplicative rule.
  - `paramDef.txt` Example parameter definition file.
+
+### Running helpers
+
+ - `run_local.sh` Runs parameter set with the desired executable on the local machine.
+ - `run_local_multi.sh` Runs a parameter set on multiple threads on local machine.
  
 ### GENESIS related scripts
  - `readParameters.g` GENESIS functions for extracting parameters from environment variables.
  - `sim_genesis_1par.sh` Cluster-agnostic script that runs Genesis with 1 parameter line.
+ - `par2batch_genesis.sh` Creates a GENESIS execution batch file from a parameter set.
 
 ### See also
 To create parameter files from within Matlab, also see the [Pandora

@@ -2,30 +2,42 @@ Parallel parameter search scripts for simulating neuron models
 ======================================================================
 
 `param-search-neuro` is a collection of scripts to simulate a neuron
-model for each of the entries in a parameter set. Evaluating the model
-at different places in its parameter space allows mapping its output
-and also creating [neuronal model
-databases](http://link.springer.com/referenceworkentry/10.1007/978-1-4614-7320-6_165-1).
+model for each of the entries in a parameter set, but in practice it
+could run any simulator. Evaluating the model at different places in
+its parameter space allows mapping its output and also
+creating
+[neuronal model databases](http://link.springer.com/referenceworkentry/10.1007/978-1-4614-7320-6_165-1).
 
-We provide a formal method to run a set of parameters locally or on
+It provides a simple method to run a set of parameters locally or on
 high-performance computing (HPC) platforms by defining the concept of a
 parameter file. This is a text file that contains a matrix of numbers,
 where columns represent different parameters and rows represent
-different model runs or trials. The trials can then be simulated
-serially or in parallel through the use of the provided
-scripts. Scripts here allow constructing the parameter file in a
-variety of ways, including but not limited to selecting all
-combinations of discrete values of each parameter. Parameter files can
-also be easily imported from other sources.
+different model runs or trials:
 
-The key advantage of using these scripts is being able to compile text
-parameter files into binary objects and then reaching parameters of
-one trial in constant time (i.e. _O(1)_). This allows out-of-order
-execution of simulations, which is especially useful in parallel
-environments because it eliminates the need to prevent race
-conditions, which is often difficult.
+```
+5 9 <-- Rows and columns
+1 1 2.1 9 2 0.6 50 48 0
+1 1 2.15 9 2 0.6 50 48 0
+...
+```
+
+The trials can then be simulated serially or in parallel through the
+use of the provided scripts. Scripts here allow constructing the
+parameter file in a variety of ways, including but not limited to
+selecting all combinations of discrete values of each
+parameter. Parameter files can also be easily imported from other
+sources.
+
+Using these scripts is __efficient__ because, before running
+simulation sets, text parameter files are compiled into __binary
+objects__ (using Perl). These hashtable objects reach parameters of
+requested trials in constant time (i.e. _O(1)_) and allows direct
+addressing of trials. Therefore they can be executed in arbitrary
+order, which is necessary in parallel environments because it
+eliminates the need __to prevent race conditions__.
 
 HPC platforms supported:
+
 * Sun Grid Engine (SGE)
 * PBS/MOAB
 * SLURM
@@ -60,12 +72,17 @@ Subdirectories contain additional documentation.
 1. Introduction
 ---------
 
-This tutorial demonstrates how to run a set of simulations on a high-performance cluster based on a parameter set. Commands and examples are given for running neuron simulations in [GENESIS](http://www.genesis-sim.org) and for cluster schedulers SGE and PBS/MOAB. However, the workflow and common scripts provide a general method, and could be adapted to other platforms.
+This tutorial demonstrates how to run a set of simulations on a
+high-performance cluster based on a parameter set. Commands and
+examples are given for running neuron simulations
+in [GENESIS](http://www.genesis-sim.org) and for cluster schedulers
+SGE and PBS/MOAB. However, the workflow and common scripts provide a
+general method, and could be adapted to other platforms.
 
-Before running simulations on a cluster, you must first make some preparation. This
-tutorial explains how to do these preparations step by step. The files
-needed for them are included in this directory and explained at each
-step.
+Before running simulations on a cluster, you must first make some
+preparation. This tutorial explains how to do these preparations step
+by step. The files needed for them are included in this directory and
+explained at each step.
 
 To learn about the Sun Grid Engine (SGE) on how to submit 
 and monitor jobs, start from the "man sge_intro" manual page. 
