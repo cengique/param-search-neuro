@@ -9,10 +9,11 @@ creating
 [neuronal model databases](http://link.springer.com/referenceworkentry/10.1007/978-1-4614-7320-6_165-1).
 
 It provides a simple method to run a set of parameters locally or on
-high-performance computing (HPC) platforms by defining the concept of a
-parameter file. This is a text file that contains a matrix of numbers,
-where columns represent different parameters and rows represent
-different model runs or trials:
+high-performance computing (HPC) platforms by defining the concept of
+a parameter file. This is a text file that contains a matrix of
+numbers, where columns represent different parameters and rows
+represent different model runs or trials with different parameter
+configurations:
 
 ```
 5 9 <-- Rows and columns
@@ -114,60 +115,32 @@ each line will furnish input parameters for each simulation.
 ### Steps for running simulations on local machine.
 
 	
-	*Note*: The Perl script file def2par.pl reads the
-    `input_ASCII_file.txt` and creates the parameter combinations file
-    `all_sim_comb.par`. The first line of this file contains the
-    number of combinations (or, number of lines in the file,
-    equivalent to the number of simulations) and the (number of
-    parameters + 1). The rest of the lines are all the same: "list of
-    parameters no_of_line 0". E.g. (first 5 lines of the
-    `all_sim_comb.par` file):
-
-		390625 9
-		-0.065 0 0 0 0 0 0 0 1 0
-		-0.055 0 0 0 0 0 0 0 2 0
-		-0.050 0 0 0 0 0 0 0 3 0
-		-0.040 0 0 0 0 0 0 0 4 0
-		-0.030 0 0 0 0 0 0 0 5 0
 	
 
 
-3. Create a db that is a hashtable for the simulations:
-
-		$ ./par2db.pl all_sim_comb.par 
-
-	The output of the command is `all_sim_comb.par.db` (`*.par.db`) file which is a database (db) containing a hashtable. This db provides fast access to a simulation based on its hash key from the hashtable (reading its corresponding line from the parameter file is a much slower way of accessing it).
-
-	*Note*: The db file is a very large file. So, before creating it, one needs to make sure there is enough space on the disk.
-
-	*Note*: You can access data from the database by using dosimnum script:
-
-		$ ./get_1par.pl    //gives the usage of the command
-
-	 For accessing line 8 (the 8th combination of param) of the all_sim_comb.par.db db:
-
-		$ ./get_1par.pl param_file line_no //general syntax
-
-   e.g.:
-
-		$ ./get_1par.pl all_sim_comb.par 8
 
 4. Use Genesis environment variables to set the row no. (obtained via db) to be passed as input param to the genesis file:
 
-		$ export GENESIS_PAR_ROW=`path/get_1par.pl param_file line_no`   //general syntax
-	
+```bash
+$ export GENESIS_PAR_ROW=`path/get_1par.pl param_file line_no`   //general syntax
+```
+
 	E.g.:
 
-		$ export GENESIS_PAR_ROW=`~/scripts/get_1par.pl all_sim_comb.par 8`
-
+```bash
+$ export GENESIS_PAR_ROW=`~/scripts/get_1par.pl all_sim_comb.par 8`
+```
 
 5. Finally, ready to run a simulation on local machine (here, for LEECH):
 
-		$ time lgenesis -nox -batch -notty genesis_script 2>&1 
+```bash
+$ time lgenesis -nox -batch -notty genesis_script 2>&1 
+```
 
 	E.g.:
-
-		$ time lgenesis -nox -batch -notty mainSimScript_ElementalOscillator.g 2>&1 
+```bash
+$ time lgenesis -nox -batch -notty mainSimScript_ElementalOscillator.g 2>&1 
+```
 
 	*Note*: For LEECH, `mainSimScript_ElementalOscillator.g` was modified from its original version (`testarray.g`, done by Adam Weaver) to accept the simulation parameters from outside (as explained above, from the initial input ASCII file, `paramLists.txt`). 
 
