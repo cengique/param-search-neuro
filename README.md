@@ -48,20 +48,30 @@ any other simulator. Parameters are passed to individual GENESIS
 processes using environmental variables, but they can also be passed
 on the command line.
 
+To use these scripts, either add the paths `param_file/` and your
+cluster-specific script directory (e.g., `pbs_scripts`) in your search
+PATH, or refer to these scripts with full paths.
+
 See the tutorial below and the examples in the relevant subdirectories
 for up-to-date usage.
 
 Directory organization
 ----------------------------------------
 
-* `param_file/`: Common scripts for running simulations and for maintaining parameter files.
-* `pbs_scripts/`: Scripts specific to PBS/[Moab](http://www.adaptivecomputing.com/).
-* `slurm_scripts/`: Scripts specific to [SLURM](https://computing.llnl.gov/linux/slurm/).
-* `sge_scripts/`: Scripts specific to the Sun Grid Engine (SGE).
-* `maintenance/`: Miscellaneous cluster and file maintenance scripts.
-* `obsolete/`: Scripts no longer used. 
+* [`param_file/`](param_file/): Common scripts for running simulations
+  and for maintaining parameter files.
+* [`pbs_scripts/`](pbs_scripts/): Scripts specific to
+  PBS/[Moab](http://www.adaptivecomputing.com/).
+* [`slurm_scripts/`](slurm_scripts/): Scripts specific
+  to [SLURM](https://computing.llnl.gov/linux/slurm/).
+* [`sge_scripts/`](sge_scripts/): Scripts specific to
+  the
+  [Sun/Oracle Grid Engine (SGE)](https://en.wikipedia.org/wiki/Oracle_Grid_Engine).
+* [`maintenance/`](maintenance/): Miscellaneous cluster and file
+  maintenance scripts.
 
-Subdirectories contain additional documentation.
+Subdirectories contain additional documentation. Start with
+the [parameter file documentation](param_file/).
 
 ### Tutorial:
 
@@ -89,7 +99,6 @@ and monitor jobs, start from the "man sge_intro" manual page.
 
 Use the "qsub" command to submit jobs to the SGE or PBS/MOAB.
 
-To use these scripts, either add the paths `param_file/` and your cluster-specific script directory (e.g., `pbs_scripts`) in your search PATH, or refer to these scripts with full paths.
 
 2. Parameter search tutorial
 -----------------
@@ -104,51 +113,15 @@ each line will furnish input parameters for each simulation.
 
 ### Steps for running simulations on local machine.
 
-1. Prepare an ASCII file `input_ASCII_file.txt` (here, called `paramLists.txt`) that contains your input data. 
-
- Format for this file (each line is read in a param):
- 
- 1. Additive increments
-
-			param_name range_low range_high num_steps
-
- 2. Multiplicative increments
-
-			param_name base_val *mul_factor ^num_steps
-
- 3. Choose from a list
-
-			param_name [ val1 val2 ... ]
-
- 4. Independent counter (indicates trial number)
-
-			param_name start_val ++ [increment]
-			
-	and, the last line is standard: `trial 1 ++`
-
-	E.g, for LEECH the paramLista.txt looks like this (option 3, list):
-
-		eLeak [ -0.065 -0.055 -0.050 -0.040 -0.030 ]
-		gBar1 [ 0 -0.3 -0.6 0.2 0.4 ]
-		gBar2 [ 0 -0.3 -0.6 0.2 0.4 ]
-		gBar3 [ 0 -0.3 -0.6 0.2 0.4 ]
-		gBar4 [ 0 -0.3 -0.6 0.2 0.4 ]
-		gBar5 [ 0 -0.3 -0.6 0.2 0.4 ]
-		gBar6 [ 0 -0.3 -0.6 0.2 0.4 ]
-		gBar7 [ 0 -0.3 -0.6 0.2 0.4 ]
-		trial 1 ++
-
-2. Obtain parameter file containing all combinations of the parameters from the input file (from 1, above).For this, use command:
-
-			$ ./def2par.pl name_param_file < input_ASCII_file.txt
-
-	E.g.:
-
-			$ ./def2par.pl all_sim_comb < paramLists.txt
-
-	will create `all_sim_comb.par` file which contains on each line a combination of the (model) parameters.
 	
-	*Note*: The Perl script file paramScanSingle.pl reads the `input_ASCII_file.txt` and creates the parameter combinations file `all_sim_comb.par`. The first line of this file contains the number of combinations (or, number of lines in the file, equivalent to the number of simulations) and the (number of parameters + 1). The rest of the lines are all the same: "list of parameters no_of_line 0". E.g. (first 5 lines of the `all_sim_comb.par` file):
+	*Note*: The Perl script file def2par.pl reads the
+    `input_ASCII_file.txt` and creates the parameter combinations file
+    `all_sim_comb.par`. The first line of this file contains the
+    number of combinations (or, number of lines in the file,
+    equivalent to the number of simulations) and the (number of
+    parameters + 1). The rest of the lines are all the same: "list of
+    parameters no_of_line 0". E.g. (first 5 lines of the
+    `all_sim_comb.par` file):
 
 		390625 9
 		-0.065 0 0 0 0 0 0 0 1 0
@@ -157,9 +130,6 @@ each line will furnish input parameters for each simulation.
 		-0.040 0 0 0 0 0 0 0 4 0
 		-0.030 0 0 0 0 0 0 0 5 0
 	
-	*Note*: you can find the usage of the perl script by typing:
-
-		$ ./def2par.pl
 
 
 3. Create a db that is a hashtable for the simulations:
