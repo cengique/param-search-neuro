@@ -85,7 +85,7 @@ name of the parameter file, and all parameter rows will be
 executed. `sim_script` will be passed an environment variable
 `PSN_TRIAL` which would inficate the row number of the parameter
 set. This number can be used, inside the script, to get the parameter
-values using the `get_1par.sh` mechanism above.
+values using the `get_1par.pl` mechanism above.
 
 Parameter sets can also be executed in multiple threads on the same
 machine using:
@@ -97,7 +97,7 @@ $ run_local_multi.sh num_threads param_range sim_script [args...]
 which takes an additional `num_threads` argument compared to
 `run_local.sh` that indicates how many threads to execute. Then, the
 parameter range will be divided into equal subsets and executed in
-parallel.
+parallel using `run_local.sh`.
 
 Scripts:
 
