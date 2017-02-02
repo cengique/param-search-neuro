@@ -170,14 +170,15 @@ Example definition files:
 ## Passing and reading parameter rows into the GENESIS neural simulator
 
 Because the GENESIS neural simulator cannot parse command line
-parameters, environment variables are used to pass parameter names and
-values:
+parameters, environment variables are used to pass parameter 
+values. Here's an example for passing the values only:
 
 ```bash
 $ export GENESIS_PAR_ROW=`path/get_1par.pl param_file line_no`   //general syntax
 ```
 
-This is done automatically with the `get_genesis_pars.sh` script:
+Both names and values are passed automatically with the
+`get_genesis_pars.sh` script:
 
 ```bash
 $ get_genesis_pars.sh 5rows9pars.par 3
@@ -194,7 +195,10 @@ grid-search files. Passed parameter environment variables are then
 parsed by first calling the function `read_env_params` and then
 accessing the parameters either by name:
 
-```
+```genesis
+include readParameters
+read_env_params
+
 par_a = {get_param_byname "a"}
 ```
 

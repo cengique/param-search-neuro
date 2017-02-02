@@ -81,10 +81,18 @@ function read_env_params
 	end
 end
 
+// From the /@params element, check parameter by name
+function check_param_byname (param_name)
+	if ( {exists /@params {param_name}} )
+		return 1
+	else
+		return 0
+	end
+end
 
 // From the /@params element, return parameter by name
 function get_param_byname (param_name)
-	if ( {exists /@params {param_name}} )
+	if ( {check_param_byname {param_name}} )
 		return {getfield /@params {param_name}}
 	else
 		echo "ERROR: At get_param_byname, parameter '"{param_name}"' not found in /@params structure!"
