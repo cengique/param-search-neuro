@@ -14,7 +14,7 @@ my %param_rows;
 
 my $dbfilename = "$param_file" . ".db";
 
-tie(%param_rows, DB_File, $dbfilename, O_RDWR|O_CREAT, 0666, $DB_HASH ) or
+tie(%param_rows, 'DB_File', $dbfilename, O_RDWR|O_CREAT, 0666, $DB_HASH ) or
   die "Cannot create the parameter database $dbfilename: \n$!\n";
 
 # Open Genesis file
