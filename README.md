@@ -1,6 +1,8 @@
 Parallel parameter search scripts for simulating neuron models
 ======================================================================
 
+**Update on 5/26/2017:** Parameter search using this tool is now implemented on the [Neuroscience Gateway (NSG)](https://www.nsgportal.org/) neural simulation platform. To use it, select "Parameter Search in Singularity on Comet" from the tools list. So far it's only limited to calling GENESIS 2.4, but potentially it could call any simulator or any other program.
+
 `param-search-neuro` is a collection of scripts to simulate a neuron
 model for each of the entries in a parameter set, but in practice it
 could run any simulator. Evaluating the model at different places in
